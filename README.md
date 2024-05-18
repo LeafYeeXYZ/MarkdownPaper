@@ -1,15 +1,9 @@
-# demo
+**以心理学报的格式从 Markdown 生成 PDF**
 
-To install dependencies:
-
+## 使用方法
 ```bash
-bun install
+# 安装 (只能用 Bun)
+bun add -g leaf-markdown-pdf
+# 使用
+md --src=xxx [--out=xxx]
 ```
-
-To run:
-
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.1.8. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
