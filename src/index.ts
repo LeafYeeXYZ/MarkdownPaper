@@ -12,7 +12,7 @@ import path from 'node:path'
  */
 export function validateArgs(args: string[]): { src: string, out: string, err: Error | null } {
   // 如果没有传参
-  if (!args) {
+  if (!args.length) {
     return { src: '', out: '', err: new Error('Example: md --src=src [--out=out]') }
 
   // 如果第一个参数不是 --src=xxx
@@ -66,7 +66,7 @@ export async function renderMarkdown(src: string, out: string): Promise<null> {
     </html>
   `
   // 调试 - 保存 html 文件
-  await fs.writeFile(path.resolve(process.cwd(), 'demo.html'), web)
+  // await fs.writeFile(path.resolve(process.cwd(), 'demo.html'), web)
   // 创建浏览器
   console.log('创建浏览器')
   const browser = await puppeteer.launch({ executablePath: 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe' })
@@ -81,7 +81,12 @@ export async function renderMarkdown(src: string, out: string): Promise<null> {
   await page.pdf({ 
     path: out, 
     format: 'A4',
-    margin: { top: '36px', right: '36px', bottom: '36px', left: '36px' }
+    margin: { 
+      top: '2cm', 
+      right: '2.5cm', 
+      bottom: '2cm', 
+      left: '2.5cm' 
+    }
   })
   // 关闭浏览器
   console.log('关闭浏览器')
