@@ -13,6 +13,7 @@
 */
 * {
   font-family: 'Times New Roman';
+  font-weight: normal;
   line-height: 1.5;
 }
 h1 {
@@ -41,9 +42,4 @@ p {
 table {
   font-size: 14px;
   font-family: '宋体';
-}
-.footer {
-  font-size: 12px;
-  font-family: '宋体';
-  text-align: center;
 }
