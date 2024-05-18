@@ -1,0 +1,49 @@
+/*
+心理学报稿件格式要求
+
+中文题目: 二号黑体 (<h1>)
+正文: 五号宋体 (<p>)
+一级标题: 四号宋体 (<h2>)
+二级标题: 五号黑体 (<h3>)
+三级标题: 五号黑体 (<h4>)
+表格: 小五号 (<table>)
+
+所有数字和英文字体都用 Times New Roman
+1.5 倍行距
+*/
+* {
+  font-family: 'Times New Roman';
+  line-height: 1.5;
+}
+h1 {
+  font-size: 36px;
+  font-family: '黑体';
+  text-align: center;
+}
+h2 {
+  font-size: 24px;
+  font-family: '宋体';
+}
+h3 {
+  font-size: 18px;
+  font-family: '黑体';
+}
+h4 {
+  font-size: 18px;
+  font-family: '黑体';
+}
+p {
+  font-size: 18px;
+  font-family: '宋体';
+  /* 首行缩进 */
+  text-indent: 2em;
+}
+table {
+  font-size: 14px;
+  font-family: '宋体';
+}
+.footer {
+  font-size: 12px;
+  font-family: '宋体';
+  text-align: center;
+}
