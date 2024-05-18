@@ -7,5 +7,5 @@
 # 安装 (只能用 Bun)
 bun add -g leaf-markdown-pdf
 # 使用
-md --src=xxx [--out=xxx]
+mdpdf --src=xxx [--out=xxx]
 ```
