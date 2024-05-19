@@ -19,7 +19,7 @@ export class Options {
   /** 不添加页脚 */
   hideFooter: boolean
   /** 正确格式 */
-  static format = 'mdpdf xxx\nmdpdf --src=xxx [--out=xxx] [--outputHTML] [--browser=xxx] [--showTitle] [--outputDOCX] [--hideFooter]'
+  static format = 'mdp xxx\nmdp --src=xxx [--out=xxx] [--outputHTML] [--browser=xxx] [--showTitle] [--outputDOCX] [--hideFooter]'
   /**
    * 生成应用参数
    * @param args 命令行参数
@@ -92,6 +92,11 @@ export class Options {
 export async function main(args: string[], cwd: string): Promise<void> {
 
   try {
+    // 如果没有参数, 显示帮助信息
+    if (args.length === 0) {
+      console.log(`\n使用方法:\n${Options.format}\n`)
+      process.exit(0)
+    }
     // 解析参数
     const options = new Options(args, cwd)
     console.log('\n开始生成\n')
