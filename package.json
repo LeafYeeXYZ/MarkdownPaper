@@ -2,17 +2,19 @@
   "name": "leaf-markdown-pdf",
   "module": "./src/index.ts",
   "type": "module",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "author": {
     "name": "LeafYeeXYZ",
     "email": "xiaoyezi@leafyee.xyz"
   },
   "license": "GPL-3.0-only",
   "scripts": {
-    "mdpdf": "bun ./bin/md.ts"
+    "mdpdf": "bun ./bin/mdpdf.ts",
+    "try": "bun ./bin/mdpdf.ts --src=test.md --outputHTML",
+    "publish": "npm publish"
   },
   "bin": {
-    "mdpdf": "./bin/md.ts"
+    "mdpdf": "./bin/mdpdf.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"

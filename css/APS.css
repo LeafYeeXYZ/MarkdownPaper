@@ -1,0 +1,83 @@
+* {
+  font-family: 'Times New Roman'; /* 所有数字和英文字体都用 Times New Roman */
+  line-height: 1.5; /* 1.5倍行距 */
+}
+h1 { /* 中文题目: 二号黑体 */
+  font-size: 29px;
+  font-weight: normal;
+  font-family: '黑体';
+  text-align: center;
+  margin: 14.5px 0;
+}
+.author { /* 作者姓名: 四号仿宋 */
+  font-size: 18px;
+  font-family: '仿宋';
+  text-align: center;
+  margin: 9px 0;
+}
+.school { /* 作者单位: 小五宋体 */
+  font-size: 12px;
+  font-family: '宋体';
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 29px;
+}
+.abstract,
+.keywords { /* 摘要和关键词: 五号宋体 */
+  font-size: 14px;
+  font-family: '宋体';
+  margin: 9px 0;
+  & > span { 
+    font-family: '黑体'; 
+    display: inline-block;
+    margin-right: 14px;
+  }
+}
+.keywords { margin-bottom: 29px; }
+h2 { /* 一级标题: 四号宋体 */
+  font-size: 18px;
+  font-weight: normal;
+  font-family: '宋体';
+  margin: 9px 0;
+}
+h3 { /* 二级标题: 五号黑体 */
+  font-size: 14px;
+  font-weight: normal;
+  font-family: '黑体';
+  margin: 7px 0;
+}
+h4 { /* 三级标题: 五号黑体 */
+  font-size: 14px;
+  font-weight: normal;
+  font-family: '黑体';
+  margin: 7px 0;
+}
+p { /* 正文: 五号宋体 */
+  font-size: 14px;
+  font-family: '宋体';
+  text-indent: 2em;
+  margin: 7px 0;
+}
+h5 { /* "参考文献": 五号黑体 */
+  font-size: 14px;
+  font-weight: normal;
+  font-family: '黑体';
+  text-align: center;
+  margin: 7px 0;
+}
+ul { /* 参考文献的项目: 小五号宋体 */
+  list-style-type: none;
+  padding: 0;
+  & > li { 
+    font-size: 12px;
+    font-family: '宋体';
+    margin: 6px 0;
+    text-indent: -24px;
+    padding-left: 24px;
+  }
+  & a {
+    text-decoration: none;
+    font-family: '宋体';
+    color: black;
+  }
+}
