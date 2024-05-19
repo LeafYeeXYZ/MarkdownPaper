@@ -73,6 +73,7 @@ ul { /* 参考文献的项目: 小五号宋体 */
     font-size: 12px;
     font-family: '宋体';
     margin: 6px 0;
+    text-align: justify;
     text-indent: -24px;
     padding-left: 24px;
   }
