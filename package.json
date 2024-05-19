@@ -2,7 +2,7 @@
   "name": "leaf-markdown-pdf",
   "module": "./src/index.ts",
   "type": "module",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "author": {
     "name": "LeafYeeXYZ",
     "email": "xiaoyezi@leafyee.xyz"
@@ -11,7 +11,7 @@
   "scripts": {
     "mdpdf": "bun ./bin/mdpdf.ts",
     "try": "bun ./bin/mdpdf.ts --src=test.md --outputHTML",
-    "publish": "npm publish"
+    "pub": "npm publish"
   },
   "bin": {
     "mdpdf": "./bin/mdpdf.ts"
