@@ -1,6 +1,5 @@
 {
-  "name": "leaf-markdown-pdf",
-  "module": "./src/index.ts",
+  "name": "leaf-markdown-paper",
   "type": "module",
   "version": "1.1.0",
   "author": {
@@ -9,12 +8,12 @@
   },
   "license": "GPL-3.0-only",
   "scripts": {
-    "mdpdf": "bun ./bin/mdpdf.ts",
-    "try": "bun ./bin/mdpdf.ts --src=test.md --outputHTML",
+    "mdp": "bun ./bin/mdp.ts",
+    "try": "bun ./bin/mdp.ts --src=test.md --outputHTML --outputDOCX",
     "pub": "npm publish"
   },
   "bin": {
-    "mdpdf": "./bin/mdpdf.ts"
+    "mdp": "./bin/mdp.ts"
   },
   "devDependencies": {
     "@types/bun": "latest"

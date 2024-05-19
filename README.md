@@ -1,13 +1,13 @@
-**以心理学报的格式从 Markdown 生成 PDF**
+**以心理学报的格式从 Markdown 生成 PDF / HTML / DOCX 文件**
 
 ## 使用方法
 ```bash
 # 安装 (只能用 Bun)
-bun add -g leaf-markdown-pdf
+bun add -g leaf-markdown-paper
 # 使用
-mdpdf xxx # Markdown 文件路径
+mdp xxx # Markdown 文件路径
 # 或
-mdpdf --src=xxx # 其他均为可选参数, 见下方参数说明
+mdp --src=xxx # 其他均为可选参数, 见下方参数说明
 ```
 
 | 参数 | 说明 |
