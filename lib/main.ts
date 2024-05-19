@@ -15,7 +15,7 @@ class Options {
   /** 显示文件名 */
   showTitle: boolean
   /** 正确格式 */
-  static format = 'mdpdf --src=xxx [--out=xxx] [--outputHTML] [--browser=xxx] [--showTitle]'
+  static format = 'mdpdf xxx\nmdpdf --src=xxx [--out=xxx] [--outputHTML] [--browser=xxx] [--showTitle]'
   /**
    * 生成应用参数
    * @param args 命令行参数
@@ -28,6 +28,8 @@ class Options {
     this.outputHTML = false
     this.showTitle = false
     this.browser = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+    // 单参数简写
+    if (args.length === 1 && !args[0].startsWith('--')) args[0] = '--src=' + args[0]
     // 解析参数
     args.forEach(arg => {
       switch (arg.split('=')[0]) {
@@ -84,7 +86,7 @@ export async function main(args: string[], cwd: string): Promise<void> {
     console.log('生成成功\n')
 
   } catch (e) {
-    if (e instanceof SyntaxError) console.error('\n参数错误, 正确格式:\nmdpdf --src=xxx [--out=xxx] [--outputHTML] [--browser=xxx]\n')
+    if (e instanceof SyntaxError) console.error(`\n参数错误, 正确格式:\n${Options.format}\n`)
     else if (e instanceof Error) console.error(`\n未知错误, 错误信息:\n${e.name}\n${e.message}\n`)
 
   } finally {

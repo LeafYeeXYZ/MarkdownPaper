@@ -2,7 +2,7 @@
   "name": "leaf-markdown-pdf",
   "module": "./src/index.ts",
   "type": "module",
-  "version": "0.2.1",
+  "version": "1.0.0",
   "author": {
     "name": "LeafYeeXYZ",
     "email": "xiaoyezi@leafyee.xyz"

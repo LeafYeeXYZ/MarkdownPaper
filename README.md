@@ -5,6 +5,8 @@
 # 安装 (只能用 Bun)
 bun add -g leaf-markdown-pdf
 # 使用
+mdpdf xxx # Markdown 文件路径
+# 或
 mdpdf --src=xxx [--out=xxx] [--outputHTML] [--browser=xxx] [--showTitle]
 ```
 
