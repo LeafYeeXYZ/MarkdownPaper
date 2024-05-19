@@ -3,7 +3,7 @@ import puppeteer from 'puppeteer-core'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
-class Options {
+export class Options {
   /** markdown 文件绝对路径 */
   src: string
   /** pdf 文件绝对路径 */
@@ -14,8 +14,12 @@ class Options {
   browser: string
   /** 显示文件名 */
   showTitle: boolean
+  /** 是否输出 docx */
+  outputDOCX: boolean
+  /** 不添加页脚 */
+  hideFooter: boolean
   /** 正确格式 */
-  static format = 'mdpdf xxx\nmdpdf --src=xxx [--out=xxx] [--outputHTML] [--browser=xxx] [--showTitle]'
+  static format = 'mdpdf xxx\nmdpdf --src=xxx [--out=xxx] [--outputHTML] [--browser=xxx] [--showTitle] [--outputDOCX] [--hideFooter]'
   /**
    * 生成应用参数
    * @param args 命令行参数
@@ -26,7 +30,9 @@ class Options {
     this.src = ''
     this.out = ''
     this.outputHTML = false
+    this.outputDOCX = false
     this.showTitle = false
+    this.hideFooter = false
     this.browser = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
     // 单参数简写
     if (args.length === 1 && !args[0].startsWith('--')) args[0] = '--src=' + args[0]
@@ -51,6 +57,14 @@ class Options {
         }
         case '--showTitle': {
           this.showTitle = true
+          break
+        }
+        case '--outputDOCX': {
+          this.outputDOCX = true
+          break
+        }
+        case '--hideFooter': {
+          this.hideFooter = true
           break
         }
         case '--browser': {
@@ -87,7 +101,7 @@ export async function main(args: string[], cwd: string): Promise<void> {
 
   } catch (e) {
     if (e instanceof SyntaxError) console.error(`\n参数错误, 正确格式:\n${Options.format}\n`)
-    else if (e instanceof Error) console.error(`\n未知错误, 错误信息:\n${e.name}\n${e.message}\n`)
+    else if (e instanceof Error) console.error(`\n错误, 错误信息:\n${e.name}\n${e.message}\n`)
 
   } finally {
     process.exit(0)
@@ -122,7 +136,7 @@ async function renderMarkdown(options: Options): Promise<void> {
     </html>
   `
   // 保存 html 文件
-  options.outputHTML && await fs.writeFile(options.src.replace('.md', '.html'), web)
+  options.outputHTML && await fs.writeFile(options.out.replace('.pdf', '.html'), web)
   // 创建浏览器
   const browser = await puppeteer.launch({ executablePath: options.browser })
   // 创建页面
@@ -141,8 +155,32 @@ async function renderMarkdown(options: Options): Promise<void> {
     },
     displayHeaderFooter: true,
     headerTemplate: options.showTitle ? `<div style="font-size: 9px; font-family: '宋体'; color: #333; padding: 5px; margin-left: 0.6cm;"> <span class="title"></span> </div>` : `<div></div>`,
-    footerTemplate: `<div style="font-size: 9px; font-family: '宋体'; color: #333; padding: 5px; margin: 0 auto;">第 <span class="pageNumber"></span> 页 / 共 <span class="totalPages"></span> 页</div>`,
+    footerTemplate: options.hideFooter ? `<div></div>` : `<div style="font-size: 9px; font-family: '宋体'; color: #333; padding: 5px; margin: 0 auto;">第 <span class="pageNumber"></span> 页 / 共 <span class="totalPages"></span> 页</div>`,
   })
   // 关闭浏览器
   await browser.close()
+  // 保存 docx 文件
+  if (options.outputDOCX) {
+    await new Promise<void>((resolve, reject) => {
+      const worker = new Worker(new URL('docx.ts', import.meta.url).href)
+      worker.postMessage(options)
+      worker.onmessage = (e) => {
+        switch (e.data) {
+          case 'success': {
+            console.log('')
+            resolve()
+            break
+          }
+          case 'error': {
+            reject(Error('生成 docx 文件失败'))
+            break
+          }
+          default: {
+            reject(Error('调用 Python 时发生未知错误'))
+            break
+          }
+        }
+      }
+    })
+  }
 }

@@ -7,16 +7,18 @@ bun add -g leaf-markdown-pdf
 # 使用
 mdpdf xxx # Markdown 文件路径
 # 或
-mdpdf --src=xxx [--out=xxx] [--outputHTML] [--browser=xxx] [--showTitle]
+mdpdf --src=xxx # 其他均为可选参数, 见下方参数说明
 ```
 
 | 参数 | 说明 |
 | :---: | :---: |
 | `--src=xxx` | 源文件路径, **必须** |
 | `--out=xxx` | 输出文件路径, 默认为源文件路径的同名 `PDF` 文件 |
-| `--outputHTML` | 输出 `HTML` 文件, 默认不输出 |
 | `--browser=xxx` | 自定义浏览器可执行文件, 非 `Windows` 系统则必须 |
 | `--showTitle` | 在页眉显示文件名, 默认不显示 |
+| `--hideFooter` | 隐藏页码, 默认显示 |
+| `--outputHTML` | 输出 `HTML` 文件, 默认不输出 |
+| `--outputDOCX` | 输出 `DOCX` 文件, 默认不输出<br>**须先执行 `pip install pdf2docx` 安装依赖**<br>使用时推荐开启 `--hideFooter` 参数 |
 
 ## 编写格式
 ```markdown
