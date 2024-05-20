@@ -83,3 +83,15 @@ ul { /* 参考文献的项目: 小五号宋体 */
     color: black;
   }
 }
+.image-title { /* 图片的标题: 六号宋体 */
+  font-size: 10px;
+  font-weight: normal;
+  font-family: '宋体';
+  text-align: center;
+  margin: 5px 0;
+}
+img {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+}

@@ -2,6 +2,7 @@ import { marked } from 'marked'
 import puppeteer from 'puppeteer-core'
 import fs from 'node:fs/promises'
 import path from 'node:path'
+import { readFileSync } from 'node:fs'
 
 export class Options {
   /** markdown 文件绝对路径 */
@@ -127,7 +128,7 @@ async function renderMarkdown(options: Options): Promise<void> {
   const css = await fs.readFile(path.resolve(import.meta.dir, '../css/APS.css'))
   // 创建网页文件
   const title = path.basename(options.src).replace('.md', '')
-  const web = `
+  let web = `
     <!DOCTYPE html>
     <html lang="zh-CN">
     <head>
@@ -140,8 +141,17 @@ async function renderMarkdown(options: Options): Promise<void> {
     </body>
     </html>
   `
+  // 把包裹图片的 p 标签去掉, 并添加标题 <div class="image-title">...</div>
+  web = web.replace(/<p><img (.*?)><\/p>/g, '<img $1>')
+  web = web.replace(/<img src="(.*?)" alt="(.*?)">/g, '<div class="image-title">$2</div><img src="$1" alt="$2">')
   // 保存 html 文件
   options.outputHTML && await fs.writeFile(options.out.replace('.pdf', '.html'), web)
+  // 把图片转换为 base64
+  web = web.replace(/src="(.+?)"/g, (match, p1) => {
+    if (p1.startsWith('http')) return match
+    const data = readFileSync(path.resolve(path.dirname(options.src), p1)).toString('base64')
+    return `src="data:image/${path.extname(p1).replace('.', '')};base64,${data}"`
+  })
   // 创建浏览器
   const browser = await puppeteer.launch({ executablePath: options.browser })
   // 创建页面
