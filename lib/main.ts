@@ -158,7 +158,7 @@ async function renderMarkdown(options: Options): Promise<void> {
       bottom: '2cm', 
       left: '2.5cm' 
     },
-    displayHeaderFooter: true,
+    displayHeaderFooter: options.showTitle || !options.hideFooter,
     headerTemplate: options.showTitle ? `<div style="font-size: 9px; font-family: '宋体'; color: #333; padding: 5px; margin-left: 0.6cm;"> <span class="title"></span> </div>` : `<div></div>`,
     footerTemplate: options.hideFooter ? `<div></div>` : `<div style="font-size: 9px; font-family: '宋体'; color: #333; padding: 5px; margin: 0 auto;">第 <span class="pageNumber"></span> 页 / 共 <span class="totalPages"></span> 页</div>`,
   })
@@ -168,7 +168,6 @@ async function renderMarkdown(options: Options): Promise<void> {
   if (options.outputDOCX) {
     await new Promise<void>((resolve, reject) => {
       const worker = new Worker(new URL('docx.ts', import.meta.url).href)
-      worker.postMessage(options)
       worker.onmessage = (e) => {
         switch (e.data) {
           case 'success': {
@@ -186,6 +185,7 @@ async function renderMarkdown(options: Options): Promise<void> {
           }
         }
       }
+      worker.postMessage(options)
     })
   }
 }
