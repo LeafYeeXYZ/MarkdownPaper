@@ -8,7 +8,7 @@ h1 { /* 中文题目: 二号黑体 */
   font-family: '黑体';
   text-align: center;
   margin-top: 0;
-  margin-bottom: 14.5px;
+  margin-bottom: 9px;
 }
 .author { /* 作者姓名: 四号仿宋 */
   font-size: 18px;
@@ -28,7 +28,7 @@ h1 { /* 中文题目: 二号黑体 */
   text-align: justify;
   margin-top: 9px;
   margin-bottom: 4.5px;
-  padding: 0 20px;
+  padding: 0 28px;
   &::before { 
     content: '摘　要';
     font-family: '黑体';
@@ -41,7 +41,7 @@ h1 { /* 中文题目: 二号黑体 */
   font-family: '宋体';
   margin-top: 0;
   margin-bottom: 29px; 
-  padding: 0 20px;
+  padding: 0 28px;
   &::before { 
     content: '关键词';
     font-family: '黑体';
@@ -127,7 +127,8 @@ table { /* 表格: 小五号宋体 */
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
-  & th {
+  & th, & td {
+    font-family: '宋体';
     font-weight: normal;
   }
   & thead::after { /* 用来做三线表中间的横线 */

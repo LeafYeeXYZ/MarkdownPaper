@@ -20,7 +20,7 @@ export class Options {
   /** 不添加页脚 */
   hideFooter: boolean
   /** 正确格式 */
-  static format = 'mdp xxx\nmdp --src=xxx [--out=xxx] [--outputHTML] [--browser=xxx] [--showTitle] [--outputDOCX] [--hideFooter]'
+  static format = 'mdp <path> [--out=xxx] [--outputHTML] [--browser=xxx] [--showTitle] [--outputDOCX] [--hideFooter]'
   /**
    * 生成应用参数
    * @param args 命令行参数
@@ -35,9 +35,10 @@ export class Options {
     this.showTitle = false
     this.hideFooter = false
     this.browser = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
-    // 单参数简写
-    if (args.length === 1 && !args[0].startsWith('--')) args[0] = '--src=' + args[0]
-    // 解析参数
+    // 解析路径参数
+    if (args.length === 0) throw SyntaxError()
+    else args[0] = `--src=${args[0]}`
+    // 解析其他参数
     args.forEach(arg => {
       switch (arg.split('=')[0]) {
         case '--src': {
@@ -80,7 +81,6 @@ export class Options {
       }
     })
     // 检查参数
-    if (this.src === '') throw SyntaxError()
     if (this.out === '') this.out = this.src.replace('.md', '.pdf')
   }
 }
