@@ -85,6 +85,82 @@ export class Options {
   }
 }
 
+class Labels {
+  /**
+   * 转换 markdown
+   * @param md markdown 字符串
+   * @returns 转换后的字符串
+   */
+  static transform(md: string): string {
+    md = Labels.tableTitle(md)
+    md = Labels.author(md)
+    md = Labels.school(md)
+    md = Labels.keywords(md)
+    md = Labels.abstract(md)
+    return md
+  }
+  /** 
+   * 表格标题
+   * @param md markdown 字符串
+   * @returns 转换后的字符串
+   * @example
+   * #table-title# xxx
+   * ->
+   * <div class="table-title">xxx</div>
+   */
+  static tableTitle(md: string): string {
+    return md.replace(/#table-title# (.*)/mg, '<div class="table-title">$1</div>')
+  }
+  /**
+   * 作者
+   * @param md markdown 字符串
+   * @returns 转换后的字符串
+   * @example
+   * #author# xxx
+   * ->
+   * <div class="author">xxx</div>
+   */
+  static author(md: string): string {
+    return md.replace(/#author# (.*)/mg, '<div class="author">$1</div>')
+  }
+  /**
+   * 单位
+   * @param md markdown 字符串
+   * @returns 转换后的字符串
+   * @example
+   * #school# xxx
+   * ->
+   * <div class="school">xxx</div>
+   */
+  static school(md: string): string {
+    return md.replace(/#school# (.*)/mg, '<div class="school">$1</div>')
+  }
+  /**
+   * 关键词
+   * @param md markdown 字符串
+   * @returns 转换后的字符串
+   * @example
+   * #keywords# xxx
+   * ->
+   * <div class="keywords">xxx</div>
+   */
+  static keywords(md: string): string {
+    return md.replace(/#keywords# (.*)/mg, '<div class="keywords">$1</div>')
+  }
+  /**
+   * 摘要
+   * @param md markdown 字符串
+   * @returns 转换后的字符串
+   * @example
+   * #abstract# xxx
+   * ->
+   * <div class="abstract">xxx</div>
+   */
+  static abstract(md: string): string {
+    return md.replace(/#abstract# (.*)/mg, '<div class="abstract">$1</div>')
+  }
+}
+
 /**
  * 主函数
  * @param args 命令行参数
@@ -121,7 +197,9 @@ export async function main(args: string[], cwd: string): Promise<void> {
  */
 async function renderMarkdown(options: Options): Promise<void> {
   // 读取 markdown 文件
-  const md = await fs.readFile(options.src, { encoding: 'utf-8' })
+  let md = await fs.readFile(options.src, { encoding: 'utf-8' })
+  // 处理标签
+  md = Labels.transform(md)
   // 转换 markdown 为 html
   const html = await marked(md)
   // 读取 css 文件

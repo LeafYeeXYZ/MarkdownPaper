@@ -22,18 +22,30 @@ h1 { /* 中文题目: 二号黑体 */
   margin-top: 3px;
   margin-bottom: 29px;
 }
-.abstract,
-.keywords { /* 摘要和关键词: 五号宋体 */
+.abstract { /* 摘要和关键词: 五号宋体 */
   font-size: 14px;
   font-family: '宋体';
-  margin: 9px 0;
-  & > span { 
-    font-family: '黑体'; 
+  margin-top: 9px;
+  margin-bottom: 4.5px;
+  &::before { 
+    content: '摘　要';
+    font-family: '黑体';
     display: inline-block;
     margin-right: 14px;
   }
 }
-.keywords { margin-bottom: 29px; }
+.keywords { 
+  font-size: 14px;
+  font-family: '宋体';
+  margin-top: 0;
+  margin-bottom: 29px; 
+  &::before { 
+    content: '关键词';
+    font-family: '黑体';
+    display: inline-block;
+    margin-right: 14px;
+  }
+}
 h2 { /* 一级标题: 四号宋体 */
   font-size: 18px;
   font-weight: normal;
@@ -83,15 +95,42 @@ ul { /* 参考文献的项目: 小五号宋体 */
     color: black;
   }
 }
-.image-title { /* 图片的标题: 六号宋体 */
-  font-size: 10px;
+.image-title { /* 图片的标题: 小五号宋体 */
+  font-size: 12px;
   font-weight: normal;
   font-family: '宋体';
   text-align: center;
-  margin: 5px 0;
+  margin: 6px 0;
 }
 img {
   display: block;
   max-width: 100%;
   margin: 0 auto;
+}
+.table-title { /* 表格的标题: 小五号宋体 */
+  font-size: 12px;
+  font-weight: normal;
+  font-family: '宋体';
+  text-align: center;
+  margin: 6px 0;
+}
+table { /* 表格: 小五号宋体 */
+  font-size: 12px;
+  font-family: '宋体';
+  position: relative;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  & th {
+    font-weight: normal;
+  }
+  & thead::after { /* 用来做三线表中间的横线 */
+    content: '';
+    display: block;
+    position: absolute;
+    border-top: 1px solid #00000060;
+    width: 100%;
+  }
 }
