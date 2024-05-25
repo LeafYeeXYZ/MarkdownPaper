@@ -139,3 +139,19 @@ table { /* 表格: 小五号宋体 */
     width: 100%;
   }
 }
+
+ol {
+  padding: 0;
+  padding-left: 28px;
+  & > li { 
+    font-size: 14px;
+    font-family: '宋体';
+    margin: 7px 0;
+    text-align: justify;
+  }
+  & a {
+    text-decoration: none;
+    font-family: '宋体';
+    color: black;
+  }
+}

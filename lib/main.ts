@@ -225,10 +225,16 @@ async function renderMarkdown(options: Options): Promise<void> {
   // 保存 html 文件
   options.outputHTML && await fs.writeFile(options.out.replace('.pdf', '.html'), web)
   // 把图片转换为 base64
-  web = web.replace(/src="(.+?)"/g, (match, p1) => {
+  web = web.replace(/<img src="(.+?)"/g, (match, p1) => {
     if (p1.startsWith('http')) return match
-    const data = readFileSync(path.resolve(path.dirname(options.src), p1)).toString('base64')
-    return `src="data:image/${path.extname(p1).replace('.', '')};base64,${data}"`
+    try {
+      const url = path.resolve(path.dirname(options.src), decodeURI(p1))
+      const data = readFileSync(url).toString('base64')
+      return `<img src="data:image/${path.extname(p1).replace('.', '')};base64,${data}"`
+    } catch (_) {
+      console.error(`图片 ${p1} 不存在, 已跳过`)
+      return match
+    }
   })
   // 创建浏览器
   const browser = await puppeteer.launch({ executablePath: options.browser })

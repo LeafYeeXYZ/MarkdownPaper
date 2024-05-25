@@ -1,7 +1,7 @@
 {
   "name": "leaf-markdown-paper",
   "type": "module",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "author": {
     "name": "LeafYeeXYZ",
     "email": "xiaoyezi@leafyee.xyz"
@@ -9,7 +9,6 @@
   "license": "GPL-3.0-only",
   "scripts": {
     "mdp": "bun ./bin/mdp.ts",
-    "try": "bun ./bin/mdp.ts test --outputHTML",
     "pub": "npm publish"
   },
   "bin": {

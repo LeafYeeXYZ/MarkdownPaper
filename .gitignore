@@ -1,10 +1,6 @@
 # Based on https://raw.githubusercontent.com/github/gitignore/main/Node.gitignore
 
-test.md
-test.html
-test.pdf
-test.docx
-figure1.png
+demo
 
 # Logs
 
