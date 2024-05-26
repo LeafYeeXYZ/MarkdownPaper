@@ -2,7 +2,7 @@ import { marked } from 'marked'
 import puppeteer from 'puppeteer-core'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { readFileSync } from 'node:fs'
+import { readFileSync, statSync } from 'node:fs'
 
 export class Options {
   /** markdown 文件绝对路径 */
@@ -19,8 +19,19 @@ export class Options {
   outputDOCX: boolean
   /** 不添加页脚 */
   hideFooter: boolean
+  /** 样式 */
+  style: string
   /** 正确格式 */
-  static format = 'mdp <path> [--out=xxx] [--outputHTML] [--browser=xxx] [--showTitle] [--outputDOCX] [--hideFooter]'
+  static format = `mdp <markdown> [--options]
+
+    <markdown>:  markdown 文件相对路径
+    --out=<path>:  输出文件相对路径 (默认为 <markdown>)
+    --style=<path>:  样式文件相对路径 (默认为 APS)
+    --outputHTML:  输出 html 文件 (默认不输出)
+    --outputDOCX:  输出 docx 文件 (默认不输出)
+    --showTitle:  在页眉显示文件名 (默认不显示)
+    --hideFooter:  不添加页脚 (默认添加)
+    --browser=<path>:  自定义浏览器路径 (默认为 Edge)`
   /**
    * 生成应用参数
    * @param args 命令行参数
@@ -30,6 +41,7 @@ export class Options {
     // 默认参数
     this.src = ''
     this.out = ''
+    this.style = path.resolve(import.meta.dir, '../css/APS.css')
     this.outputHTML = false
     this.outputDOCX = false
     this.showTitle = false
@@ -51,6 +63,22 @@ export class Options {
           const a = arg.split('=')
           if (a.length !== 2 || a[1] === '') throw SyntaxError()
           this.out = a[1].endsWith('.pdf') ? path.resolve(cwd, a[1]) : path.resolve(cwd, a[1] + '.pdf')
+          break
+        }
+        case '--style': {
+          const a = arg.split('=')
+          if (a.length !== 2 || a[1] === '') throw SyntaxError()
+          this.style = a[1].endsWith('.css') ? path.resolve(import.meta.dir, '../css', a[1]) : path.resolve(import.meta.dir, '../css', a[1] + '.css')
+          try {
+            statSync(this.style)
+          } catch (_) {
+            this.style = a[1].endsWith('.css') ? path.resolve(cwd, a[1]) : path.resolve(cwd, a[1] + '.css')
+            try {
+              statSync(this.style)
+            } catch (_) {
+              throw Error('样式文件不存在')
+            }
+          }
           break
         }
         case '--outputHTML': {
@@ -92,24 +120,11 @@ class Labels {
    * @returns 转换后的字符串
    */
   static transform(md: string): string {
-    md = Labels.tableTitle(md)
     md = Labels.author(md)
     md = Labels.school(md)
     md = Labels.keywords(md)
     md = Labels.abstract(md)
     return md
-  }
-  /** 
-   * 表格标题
-   * @param md markdown 字符串
-   * @returns 转换后的字符串
-   * @example
-   * #table-title# xxx
-   * ->
-   * <div class="table-title">xxx</div>
-   */
-  static tableTitle(md: string): string {
-    return md.replace(/#table-title# (.*)/mg, '<div class="table-title">$1</div>')
   }
   /**
    * 作者
@@ -175,15 +190,15 @@ export async function main(args: string[], cwd: string): Promise<void> {
       process.exit(0)
     }
     // 解析参数
-    const options = new Options(args, cwd)
     console.log('\n开始生成\n')
+    const options = new Options(args, cwd)
     // 渲染 markdown
     await renderMarkdown(options)
     console.log('生成成功\n')
 
   } catch (e) {
-    if (e instanceof SyntaxError) console.error(`\n参数错误, 正确格式:\n${Options.format}\n`)
-    else if (e instanceof Error) console.error(`\n错误, 错误信息:\n${e.name}\n${e.message}\n`)
+    if (e instanceof SyntaxError) console.error(`参数错误, 正确格式:\n${Options.format}\n`)
+    else if (e instanceof Error) console.error(`错误:\n${e.message}\n`)
 
   } finally {
     process.exit(0)
@@ -203,7 +218,7 @@ async function renderMarkdown(options: Options): Promise<void> {
   // 转换 markdown 为 html
   const html = await marked(md)
   // 读取 css 文件
-  const css = await fs.readFile(path.resolve(import.meta.dir, '../css/APS.css'))
+  const css = await fs.readFile(options.style, { encoding: 'utf-8' })
   // 创建网页文件
   const title = path.basename(options.src).replace('.md', '')
   let web = `

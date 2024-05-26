@@ -6,12 +6,15 @@
 bun add -g leaf-markdown-paper
 # 使用 (第一个参数为源文件相对路径)
 mdp <path> [--option]
+# 查看使用方法
+mdp
 ```
 
 | 参数 | 说明 |
 | :---: | :---: |
-| `--out=xxx` | 输出文件路径, 默认为源文件路径的同名 `PDF` 文件 |
-| `--browser=xxx` | 自定义浏览器可执行文件, 非 `Windows` 系统则必须 |
+| `--out=xxx` | 输出文件相对路径<br>默认为源文件路径的同名 `PDF` 文件 |
+| `--browser=xxx` | 浏览器相对路径, 非 `Windows` 系统则必须<br>默认为 `C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe` |
+| `--style=xxx` | 自定义 `CSS` 文件相对路径/模板<br>默认为 `APS` (`Acta Psychologica Sinica`) |
 | `--showTitle` | 在页眉显示文件名, 默认不显示 |
 | `--hideFooter` | 隐藏页码, 默认显示 |
 | `--outputHTML` | 输出 `HTML` 文件, 默认不输出 |
@@ -32,7 +35,7 @@ mdp <path> [--option]
 
 ![图片标题](图片路径)
 
-#table-title# 表格标题
+> 表格标题
 
 | 表头1 | 表头2 |
 | :---: | :---: |
@@ -45,6 +48,7 @@ mdp <path> [--option]
 ```
 
 ## 更新日志
+- `1.3.0` (2024-05-26): 支持自定义 `CSS` 文件, 简化编写格式, 优化帮助信息
 - `1.2.3` (2024-05-25): 修复中文图片路径导致的错误
 - `1.2.2` (2024-05-21): 优化样式, 优化命令
 - `1.2.1` (2024-05-21): 优化摘要样式
