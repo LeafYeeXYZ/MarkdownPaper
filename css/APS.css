@@ -103,6 +103,7 @@ img {
   display: block;
   max-width: 100%;
   margin: 0 auto;
+  margin-bottom: 10px;
 }
 
 blockquote, blockquote > p { /* 表格的标题: 小五号宋体 */
@@ -120,6 +121,7 @@ table { /* 表格: 小五号宋体 */
   width: 100%;
   max-width: 100%;
   margin: 0 auto;
+  margin-bottom: 10px;
   & th, & td {
     font-weight: normal;
   }
