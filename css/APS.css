@@ -93,20 +93,14 @@ ul, ol { /* 参考文献的项目: 小五号宋体 */
   }
 }
 
-.image-title { /* 图片的标题: 小五号宋体 */
-  font-size: 12px;
-  font-weight: normal;
-  text-align: center;
-  margin: 6px 0;
-}
 img {
   display: block;
   max-width: 100%;
   margin: 0 auto;
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
-blockquote, blockquote > p { /* 表格的标题: 小五号宋体 */
+blockquote, blockquote > p { /* 图片和表格的标题: 小五号宋体 */
   font-size: 12px;
   font-weight: normal;
   text-align: center;

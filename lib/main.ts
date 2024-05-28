@@ -234,9 +234,8 @@ async function renderMarkdown(options: Options): Promise<void> {
     </body>
     </html>
   `
-  // 把包裹图片的 p 标签去掉, 并添加标题 <div class="image-title">...</div>
+  // 把包裹图片的 p 标签去掉
   web = web.replace(/<p><img (.*?)><\/p>/g, '<img $1>')
-  web = web.replace(/<img src="(.*?)" alt="(.*?)">/g, '<div class="image-title">$2</div><img src="$1" alt="$2">')
   // 保存 html 文件
   options.outputHTML && await fs.writeFile(options.out.replace('.pdf', '.html'), web)
   // 把图片转换为 base64
