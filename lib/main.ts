@@ -3,7 +3,9 @@ import puppeteer from 'puppeteer-core'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { readFileSync, statSync } from 'node:fs'
+import { en2zh, zh2en, parseCustomTags } from './utils'
 
+/** 应用参数 */
 export class Options {
   /** markdown 文件绝对路径 */
   src: string
@@ -21,6 +23,10 @@ export class Options {
   hideFooter: boolean
   /** 样式 */
   style: string
+  /** 英文标点转中文标点 */
+  zhPunctuation: boolean
+  /** 中文标点转英文标点 */
+  enPunctuation: boolean
   /** 正确格式 */
   static format = `mdp <markdown> [--options]
 
@@ -31,7 +37,9 @@ export class Options {
     --outputDOCX:  输出 docx 文件 (默认不输出)
     --showTitle:  在页眉显示文件名 (默认不显示)
     --hideFooter:  不添加页脚 (默认添加)
-    --browser=<path>:  自定义浏览器路径 (默认为 Edge)`
+    --browser=<path>:  自定义浏览器路径 (默认为 Edge)
+    --zhPunctuation:  中文标点转英文标点 (默认不转换)
+    --enPunctuation:  英文标点转中文标点 (默认不转换)`
   /**
    * 生成应用参数
    * @param args 命令行参数
@@ -47,6 +55,8 @@ export class Options {
     this.showTitle = false
     this.hideFooter = false
     this.browser = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
+    this.zhPunctuation = false
+    this.enPunctuation = false
     // 解析路径参数
     if (args.length === 0) throw SyntaxError()
     else args[0] = `--src=${args[0]}`
@@ -103,6 +113,14 @@ export class Options {
           this.browser = a[1]
           break
         }
+        case '--zhPunctuation': {
+          this.zhPunctuation = true
+          break
+        }
+        case '--enPunctuation': {
+          this.enPunctuation = true
+          break
+        }
         default: {
           throw SyntaxError()
         }
@@ -113,108 +131,15 @@ export class Options {
   }
 }
 
-class Labels {
-  /**
-   * 转换 markdown
-   * @param md markdown 字符串
-   * @returns 转换后的字符串
-   */
-  static transform(md: string): string {
-    md = Labels.author(md)
-    md = Labels.school(md)
-    md = Labels.keywords(md)
-    md = Labels.abstract(md)
-    return md
-  }
-  /**
-   * 作者
-   * @param md markdown 字符串
-   * @returns 转换后的字符串
-   * @example
-   * #author# xxx
-   * ->
-   * <div class="author">xxx</div>
-   */
-  static author(md: string): string {
-    return md.replace(/#author# (.*)/mg, '<div class="author">$1</div>')
-  }
-  /**
-   * 单位
-   * @param md markdown 字符串
-   * @returns 转换后的字符串
-   * @example
-   * #school# xxx
-   * ->
-   * <div class="school">xxx</div>
-   */
-  static school(md: string): string {
-    return md.replace(/#school# (.*)/mg, '<div class="school">$1</div>')
-  }
-  /**
-   * 关键词
-   * @param md markdown 字符串
-   * @returns 转换后的字符串
-   * @example
-   * #keywords# xxx
-   * ->
-   * <div class="keywords">xxx</div>
-   */
-  static keywords(md: string): string {
-    return md.replace(/#keywords# (.*)/mg, '<div class="keywords">$1</div>')
-  }
-  /**
-   * 摘要
-   * @param md markdown 字符串
-   * @returns 转换后的字符串
-   * @example
-   * #abstract# xxx
-   * ->
-   * <div class="abstract">xxx</div>
-   */
-  static abstract(md: string): string {
-    return md.replace(/#abstract# (.*)/mg, '<div class="abstract">$1</div>')
-  }
-}
-
-/**
- * 主函数
- * @param args 命令行参数
- * @param cwd 当前工作目录
- */
-export async function main(args: string[], cwd: string): Promise<void> {
-
-  try {
-    // 如果没有参数, 显示帮助信息
-    if (args.length === 0) {
-      console.log(`\n使用方法:\n${Options.format}\n`)
-      process.exit(0)
-    }
-    // 解析参数
-    console.log('\n开始生成\n')
-    const options = new Options(args, cwd)
-    // 渲染 markdown
-    await renderMarkdown(options)
-    console.log('生成成功\n')
-
-  } catch (e) {
-    if (e instanceof SyntaxError) console.error(`参数错误, 正确格式:\n${Options.format}\n`)
-    else if (e instanceof Error) console.error(`错误:\n${e.message}\n`)
-
-  } finally {
-    process.exit(0)
-
-  }
-}
-
 /**
  * 渲染 markdown
  * @param options 参数
  */
-async function renderMarkdown(options: Options): Promise<void> {
+export async function renderMarkdown(options: Options): Promise<void> {
   // 读取 markdown 文件
   let md = await fs.readFile(options.src, { encoding: 'utf-8' })
   // 处理标签
-  md = Labels.transform(md)
+  md = parseCustomTags(md)
   // 转换 markdown 为 html
   const html = await marked(md)
   // 读取 css 文件
@@ -256,6 +181,12 @@ async function renderMarkdown(options: Options): Promise<void> {
   const page = await browser.newPage()
   // 设置页面内容
   await page.setContent(web)
+  // 替换为中文标点
+  if (options.zhPunctuation && !options.enPunctuation) {
+    await page.evaluate(en2zh)
+  } else if (!options.zhPunctuation && options.enPunctuation) {
+    await page.evaluate(zh2en)
+  }
   // 生成 pdf
   await page.pdf({ 
     path: options.out,
