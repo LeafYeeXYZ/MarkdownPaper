@@ -2,7 +2,9 @@
 
 ## 使用方法
 ```bash
-# 安装 (只能用 Bun)
+# 安装 Bun
+npm install -g bun / yarn global add bun / pnpm add -g bun
+# 安装 MarkdownPaper
 bun add -g leaf-markdown-paper
 # 使用 (第一个参数为源文件相对路径)
 mdp <path> [--option]
