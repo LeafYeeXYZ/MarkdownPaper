@@ -25,6 +25,8 @@ mdp
 ## 模板说明
 `/theme/theme.ts` 中的 `Theme` 抽象类定义了模板的样式, 按照类似于 `aps` 文件夹的结构可自定义模板; 模板可以提供自定义功能
 
+模板制作完成后, 在 `/lib/main.ts` 中导入并添加到 `class Options -> constructor -> case '--theme':` 中即可使用
+
 ### APS 模板
 #### 额外命令行参数
 | 参数 | 说明 |
