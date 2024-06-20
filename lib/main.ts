@@ -2,8 +2,9 @@ import { marked } from 'marked'
 import puppeteer from 'puppeteer-core'
 import fs from 'node:fs/promises'
 import path from 'node:path'
-import { readFileSync, statSync } from 'node:fs'
-import { en2zh, zh2en, parseCustomTags } from './utils'
+import { readFileSync } from 'node:fs'
+import { APS } from '../theme/aps/aps'
+import { Theme } from '../theme/theme'
 
 /** 应用参数 */
 export class Options {
@@ -11,35 +12,25 @@ export class Options {
   src: string
   /** pdf 文件绝对路径 */
   out: string
-  /** 是否输出 html */
-  outputHTML: boolean
   /** 自定义浏览器 */
   browser: string
-  /** 显示文件名 */
-  showTitle: boolean
+  /** 是否输出 html */
+  outputHTML: boolean
   /** 是否输出 docx */
   outputDOCX: boolean
-  /** 不添加页脚 */
-  hideFooter: boolean
   /** 样式 */
-  style: string
-  /** 英文标点转中文标点 */
-  zhPunctuation: boolean
-  /** 中文标点转英文标点 */
-  enPunctuation: boolean
+  theme: Theme
   /** 正确格式 */
   static format = `mdp <markdown> [--options]
 
     <markdown>:  markdown 文件相对路径
     --out=<path>:  输出文件相对路径 (默认为 <markdown>)
-    --style=<path>:  样式文件相对路径 (默认为 APS)
+    --theme=<name>:  论文模板 (默认为 APS)
     --outputHTML:  输出 html 文件 (默认不输出)
     --outputDOCX:  输出 docx 文件 (默认不输出)
-    --showTitle:  在页眉显示文件名 (默认不显示)
-    --hideFooter:  不添加页脚 (默认添加)
     --browser=<path>:  自定义浏览器路径 (默认为 Edge)
-    --zhPunctuation:  中文标点转英文标点 (默认不转换)
-    --enPunctuation:  英文标点转中文标点 (默认不转换)`
+
+    模板的自定义参数见模板说明`
   /**
    * 生成应用参数
    * @param args 命令行参数
@@ -49,14 +40,10 @@ export class Options {
     // 默认参数
     this.src = ''
     this.out = ''
-    this.style = path.resolve(import.meta.dir, '../css/APS.css')
     this.outputHTML = false
     this.outputDOCX = false
-    this.showTitle = false
-    this.hideFooter = false
+    this.theme = new APS(args, cwd)
     this.browser = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
-    this.zhPunctuation = false
-    this.enPunctuation = false
     // 解析路径参数
     if (args.length === 0) throw SyntaxError()
     else args[0] = `--src=${args[0]}`
@@ -75,18 +62,15 @@ export class Options {
           this.out = a[1].endsWith('.pdf') ? path.resolve(cwd, a[1]) : path.resolve(cwd, a[1] + '.pdf')
           break
         }
-        case '--style': {
+        case '--theme': {
           const a = arg.split('=')
           if (a.length !== 2 || a[1] === '') throw SyntaxError()
-          this.style = a[1].endsWith('.css') ? path.resolve(import.meta.dir, '../css', a[1]) : path.resolve(import.meta.dir, '../css', a[1] + '.css')
-          try {
-            statSync(this.style)
-          } catch (_) {
-            this.style = a[1].endsWith('.css') ? path.resolve(cwd, a[1]) : path.resolve(cwd, a[1] + '.css')
-            try {
-              statSync(this.style)
-            } catch (_) {
-              throw Error('样式文件不存在')
+          switch (a[1].toUpperCase()) {
+            case 'APS': {
+              break
+            }
+            default: {
+              throw Error(`模板 ${a[1]} 不存在`)
             }
           }
           break
@@ -95,16 +79,8 @@ export class Options {
           this.outputHTML = true
           break
         }
-        case '--showTitle': {
-          this.showTitle = true
-          break
-        }
         case '--outputDOCX': {
           this.outputDOCX = true
-          break
-        }
-        case '--hideFooter': {
-          this.hideFooter = true
           break
         }
         case '--browser': {
@@ -112,17 +88,6 @@ export class Options {
           if (a.length !== 2 || a[1] === '') throw SyntaxError()
           this.browser = a[1]
           break
-        }
-        case '--zhPunctuation': {
-          this.zhPunctuation = true
-          break
-        }
-        case '--enPunctuation': {
-          this.enPunctuation = true
-          break
-        }
-        default: {
-          throw SyntaxError()
         }
       }
     })
@@ -138,12 +103,10 @@ export class Options {
 export async function renderMarkdown(options: Options): Promise<void> {
   // 读取 markdown 文件
   let md = await fs.readFile(options.src, { encoding: 'utf-8' })
-  // 处理标签
-  md = parseCustomTags(md)
+  // 预处理 markdown
+  md = options.theme.preParseMarkdown(md)
   // 转换 markdown 为 html
   const html = await marked(md)
-  // 读取 css 文件
-  const css = await fs.readFile(options.style, { encoding: 'utf-8' })
   // 创建网页文件
   const title = path.basename(options.src).replace('.md', '')
   let web = `
@@ -152,15 +115,15 @@ export async function renderMarkdown(options: Options): Promise<void> {
     <head>
       <meta charset="UTF-8">
       <title>${title}</title>
-      <style>${css}</style>
+      <style>${options.theme.css}</style>
     </head>
     <body>
       ${html}
     </body>
     </html>
   `
-  // 把包裹图片的 p 标签去掉
-  web = web.replace(/<p><img (.*?)><\/p>/g, '<img $1>')
+  // 预处理 html
+  web = options.theme.preParseHTML(web)
   // 保存 html 文件
   options.outputHTML && await fs.writeFile(options.out.replace('.pdf', '.html'), web)
   // 把图片转换为 base64
@@ -171,7 +134,7 @@ export async function renderMarkdown(options: Options): Promise<void> {
       const data = readFileSync(url).toString('base64')
       return `<img src="data:image/${path.extname(p1).replace('.', '')};base64,${data}"`
     } catch (_) {
-      console.error(`图片 ${p1} 不存在, 已跳过`)
+      console.error(`图片 ${p1} 不存在`)
       return match
     }
   })
@@ -181,26 +144,10 @@ export async function renderMarkdown(options: Options): Promise<void> {
   const page = await browser.newPage()
   // 设置页面内容
   await page.setContent(web)
-  // 替换为中文标点
-  if (options.zhPunctuation && !options.enPunctuation) {
-    await page.evaluate(en2zh)
-  } else if (!options.zhPunctuation && options.enPunctuation) {
-    await page.evaluate(zh2en)
-  }
+  // 执行脚本
+  await page.evaluate(options.theme.script)
   // 生成 pdf
-  await page.pdf({ 
-    path: options.out,
-    format: 'A4',
-    margin: { 
-      top: '2cm', 
-      right: '2.5cm', 
-      bottom: '2cm', 
-      left: '2.5cm' 
-    },
-    displayHeaderFooter: options.showTitle || !options.hideFooter,
-    headerTemplate: options.showTitle ? `<div style="font-size: 9px; font-family: '宋体'; color: #333; padding: 5px; margin-left: 0.6cm;"> <span class="title"></span> </div>` : `<div></div>`,
-    footerTemplate: options.hideFooter ? `<div></div>` : `<div style="font-size: 9px; font-family: '宋体'; color: #333; padding: 5px; margin: 0 auto;">第 <span class="pageNumber"></span> 页 / 共 <span class="totalPages"></span> 页</div>`,
-  })
+  await page.pdf({ path: options.out, ...options.theme.pdfOptions })
   // 关闭浏览器
   await browser.close()
   // 保存 docx 文件
