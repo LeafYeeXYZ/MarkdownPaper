@@ -1,5 +1,5 @@
 import { marked } from 'marked'
-import puppeteer from 'puppeteer-core'
+import puppeteer from 'puppeteer'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { readFileSync } from 'node:fs'
@@ -12,8 +12,6 @@ export class Options {
   src: string
   /** pdf 文件绝对路径 */
   out: string
-  /** 自定义浏览器 */
-  browser: string
   /** 是否输出 html */
   outputHTML: boolean
   /** 是否输出 docx */
@@ -43,7 +41,6 @@ export class Options {
     this.outputHTML = false
     this.outputDOCX = false
     this.theme = new APS(args, cwd)
-    this.browser = 'C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe'
     // 解析路径参数
     if (args.length === 0) throw SyntaxError()
     else args[0] = `--src=${args[0]}`
@@ -81,12 +78,6 @@ export class Options {
         }
         case '--outputDOCX': {
           this.outputDOCX = true
-          break
-        }
-        case '--browser': {
-          const a = arg.split('=')
-          if (a.length !== 2 || a[1] === '') throw SyntaxError()
-          this.browser = a[1]
           break
         }
       }
@@ -139,7 +130,7 @@ export async function renderMarkdown(options: Options): Promise<void> {
     }
   })
   // 创建浏览器
-  const browser = await puppeteer.launch({ executablePath: options.browser })
+  const browser = await puppeteer.launch()
   // 创建页面
   const page = await browser.newPage()
   // 设置页面内容

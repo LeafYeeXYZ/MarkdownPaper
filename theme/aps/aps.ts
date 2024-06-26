@@ -48,9 +48,17 @@ export class APS extends Theme {
     }
 
     // preParseHTML
-    // 把包裹图片的 p 标签去掉
     this.preParseHTML = (html: string): string => {
+      // 把包裹图片的 p 标签去掉
       html = html.replace(/<p><img (.*?)><\/p>/g, '<img $1>')
+      // 加载字体
+      html = html.replace(/<\/head>/, `
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@200..900&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@200..900&display=swap" rel="stylesheet">
+      `)
       return html
     }
 
@@ -114,8 +122,8 @@ export class APS extends Theme {
         left: '2.5cm' 
       },
       displayHeaderFooter: showTitle || !hideFooter,
-      headerTemplate: showTitle ? `<div style="font-size: 9px; font-family: '宋体'; color: #333; padding: 5px; margin-left: 0.6cm;"> <span class="title"></span> </div>` : `<div></div>`,
-      footerTemplate: hideFooter ? `<div></div>` : `<div style="font-size: 9px; font-family: '宋体'; color: #333; padding: 5px; margin: 0 auto;">第 <span class="pageNumber"></span> 页 / 共 <span class="totalPages"></span> 页</div>`,
+      headerTemplate: showTitle ? `<div style="font-size: 9px; font-family: 'SimSun'; color: #333; padding: 5px; margin-left: 0.6cm;"> <span class="title"></span> </div>` : `<div></div>`,
+      footerTemplate: hideFooter ? `<div></div>` : `<div style="font-size: 9px; font-family: 'SimSun'; color: #333; padding: 5px; margin: 0 auto;">第 <span class="pageNumber"></span> 页 / 共 <span class="totalPages"></span> 页</div>`,
     }
 
   }

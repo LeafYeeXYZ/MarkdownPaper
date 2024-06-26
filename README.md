@@ -17,7 +17,6 @@ mdp
 | 参数 | 说明 |
 | :---: | :---: |
 | `--out=xxx` | 输出文件相对路径<br>默认为源文件路径的同名 `PDF` 文件 |
-| `--browser=xxx` | 浏览器绝对路径, 非 `Windows` 系统则必须<br>默认为 `C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe` |
 | `--theme=xxx` | 论文模板, 默认为 `aps` (`Acta Psychologica Sinica`)<br>暂时没有其他模板, 欢迎贡献 |
 | `--outputHTML` | 输出 `HTML` 文件, 默认不输出 |
 | `--outputDOCX` | 输出 `DOCX` 文件, 默认不输出<br>**须先执行 `pip install pdf2docx` 安装依赖**<br>使用时推荐开启 `--hideFooter` 参数 |
@@ -68,6 +67,7 @@ mdp
 ```
 
 ## 更新日志
+- `2.1.0` (2024-06-26): 支持 `MacOS` 系统, 改为在线加载字体
 - `2.0.0` (2024-06-20): 重构代码, 完善模板功能
 - `1.4.0` (2024-05-29): 新增替换中英文标点符号功能
 - `1.3.2` (2024-05-28): 优化图表标题显示
