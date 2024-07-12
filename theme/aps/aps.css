@@ -1,20 +1,20 @@
 * {
-  font-family: 'Noto Serif', 'Noto Serif SC'; /* 所有数字和英文字体都用 Times New Roman */
+  font-family: 'Times', 'Times New Roman', '宋体', 'SimSun', '华文宋体', 'STSong'; /* 所有数字和英文字体都用 Times New Roman */
   line-height: 1.55em; /* 1.5倍行距 */
   margin: 0;
 }
 
 h1 { /* 中文题目: 二号黑体 */
   font-size: 29px;
-  font-weight: 500;
-  font-family: 'Noto Sans SC';
+  font-weight: normal;
+  font-family: '黑体', 'SimHei', '华文黑体', 'STHeiti';
   text-align: center;
   margin-bottom: 9px;
 }
 .author { /* 作者姓名: 四号仿宋 */
   font-size: 18px;
-  font-weight: 300;
-  font-family: 'Noto Serif SC';
+  font-weight: normal;
+  font-family: '仿宋', 'Fangsong', '华文仿宋', 'STFangsong';
   text-align: center;
   margin-bottom: 3px;
 }
@@ -29,8 +29,8 @@ h1 { /* 中文题目: 二号黑体 */
   padding: 0 28px;
   &::before { 
     content: '摘　要';
-    font-weight: 500;
-    font-family: 'Noto Sans SC';
+    font-weight: normal;
+    font-family: '黑体', 'SimHei', '华文黑体', 'STHeiti';
     display: inline-block;
     margin-right: 14px;
   }
@@ -41,8 +41,8 @@ h1 { /* 中文题目: 二号黑体 */
   padding: 0 28px;
   &::before { 
     content: '关键词';
-    font-weight: 500;
-    font-family: 'Noto Sans SC';
+    font-weight: normal;
+    font-family: '黑体', 'SimHei', '华文黑体', 'STHeiti';
     display: inline-block;
     margin-right: 14px;
   }
@@ -55,14 +55,14 @@ h2 { /* 一级标题: 四号宋体 */
 }
 h3 { /* 二级标题: 五号黑体 */
   font-size: 14px;
-  font-weight: 500;
-  font-family: 'Noto Sans SC';
+  font-weight: normal;
+  font-family: '黑体', 'SimHei', '华文黑体', 'STHeiti';
   margin: 5px 0;
 }
 h4 { /* 三级标题: 五号黑体 */
   font-size: 14px;
-  font-weight: 500;
-  font-family: 'Noto Sans SC';
+  font-weight: normal;
+  font-family: '黑体', 'SimHei', '华文黑体', 'STHeiti';
   margin: 3px 0;
 }
 
@@ -74,8 +74,8 @@ p { /* 正文: 五号宋体 */
 
 h5 { /* "参考文献": 五号黑体 */
   font-size: 14px;
-  font-weight: 500;
-  font-family: 'Noto Sans SC';
+  font-weight: normal;
+  font-family: '黑体', 'SimHei', '华文黑体', 'STHeiti';
   text-align: center;
   margin-bottom: 7px;
   margin-top: 20px;
@@ -132,6 +132,6 @@ table { /* 表格: 小五号宋体 */
 }
 
 b, strong { /* 加粗按黑体处理 */
-  font-weight: 500;
-  font-family: 'Noto Sans SC';
+  font-weight: normal;
+  font-family: '黑体', 'SimHei', '华文黑体', 'STHeiti';
 }

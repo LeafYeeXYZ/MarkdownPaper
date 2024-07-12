@@ -52,13 +52,13 @@ export class APS extends Theme {
       // 把包裹图片的 p 标签去掉
       html = html.replace(/<p><img (.*?)><\/p>/g, '<img $1>')
       // 加载字体
-      html = html.replace(/<\/head>/, `
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@200..900&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@200..900&display=swap" rel="stylesheet">
-      `)
+      // html = html.replace(/<\/head>/, `
+      //   <link rel="preconnect" href="https://fonts.googleapis.com">
+      //   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      //   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&display=swap" rel="stylesheet">
+      //   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@200..900&display=swap" rel="stylesheet">
+      //   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@200..900&display=swap" rel="stylesheet">
+      // `)
       return html
     }
 
