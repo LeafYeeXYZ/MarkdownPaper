@@ -1,6 +1,6 @@
 import type { PDFOptions } from 'puppeteer-core'
 
-export abstract class Theme {
+export abstract class MarkdownPaperTheme {
   /**
    * @param args 命令行参数
    * @param cwd 当前工作目录
@@ -24,14 +24,14 @@ export abstract class Theme {
    * @param md markdown 字符串
    * @returns 转换后的 markdown 字符串
    */
-  abstract preParseMarkdown(md: string): string
+  abstract preParseMarkdown(md: string): Promise<string>
   /**
    * 预处理 html 字符串  
    * 将在保存 html 文件前调用
    * @param html html 字符串
    * @returns 转换后的 html 字符串
    */
-  abstract preParseHTML(html: string): string
+  abstract preParseHTML(html: string): Promise<string>
   /**
    * 在网页中要执行的函数  
    * 将在保存 html 文件后调用

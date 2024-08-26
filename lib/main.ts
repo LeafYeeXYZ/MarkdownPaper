@@ -4,10 +4,11 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { readFileSync } from 'node:fs'
 import { APS } from '../theme/aps/aps'
-import { Theme } from '../theme/theme'
+import { MarkdownPaperTheme } from '../theme/theme'
+import type { PDFOptions } from 'puppeteer'
 
 /** 应用参数 */
-export class Options {
+class MarkdownPaperOptions {
   /** markdown 文件绝对路径 */
   src: string
   /** pdf 文件绝对路径 */
@@ -17,7 +18,7 @@ export class Options {
   /** 是否输出 docx */
   outputDOCX: boolean
   /** 样式 */
-  theme: Theme
+  theme: MarkdownPaperTheme
   /** 正确格式 */
   static format = `mdp <markdown> [--options]
 
@@ -26,7 +27,6 @@ export class Options {
     --theme=<name>:  论文模板 (默认为 APS)
     --outputHTML:  输出 html 文件 (默认不输出)
     --outputDOCX:  输出 docx 文件 (默认不输出)
-    --browser=<path>:  自定义浏览器路径 (默认为 Edge)
 
     模板的自定义参数见模板说明`
   /**
@@ -90,79 +90,100 @@ export class Options {
 /**
  * 渲染 markdown
  * @param options 参数
+ * @param rawMarkdown 如果传入此参数, 则不再读取文件
  */
-export async function renderMarkdown(options: Options): Promise<void> {
+async function renderMarkdown(
+  options: MarkdownPaperOptions,
+  rawMarkdown?: string,
+): Promise<void> {
   // 读取 markdown 文件
-  let md = await fs.readFile(options.src, { encoding: 'utf-8' })
+  const raw = rawMarkdown ?? await fs.readFile(options.src, { encoding: 'utf-8' })
   // 预处理 markdown
-  md = options.theme.preParseMarkdown(md)
+  const md = await options.theme.preParseMarkdown(raw)
   // 转换 markdown 为 html
-  const html = await marked(md)
-  // 创建网页文件
-  const title = path.basename(options.src).replace('.md', '')
-  let web = `
+  let html = `
     <!DOCTYPE html>
     <html lang="zh-CN">
     <head>
       <meta charset="UTF-8">
-      <title>${title}</title>
+      <title>${path.basename(options.src).replace('.md', '')}</title>
       <style>${options.theme.css}</style>
     </head>
     <body>
-      ${html}
+      ${await marked(md)}
     </body>
     </html>
   `
   // 预处理 html
-  web = options.theme.preParseHTML(web)
+  html = await options.theme.preParseHTML(html)
   // 保存 html 文件
-  options.outputHTML && await fs.writeFile(options.out.replace('.pdf', '.html'), web)
-  // 把图片转换为 base64
-  web = web.replace(/<img src="(.+?)"/g, (match, p1) => {
-    if (p1.startsWith('http')) return match
-    try {
-      const url = path.resolve(path.dirname(options.src), decodeURI(p1))
-      const data = readFileSync(url).toString('base64')
-      return `<img src="data:image/${path.extname(p1).replace('.', '')};base64,${data}"`
-    } catch (_) {
-      console.error(`图片 ${p1} 不存在`)
-      return match
-    }
-  })
-  // 创建浏览器
-  const browser = await puppeteer.launch()
-  // 创建页面
-  const page = await browser.newPage()
-  // 设置页面内容
-  await page.setContent(web)
-  // 执行脚本
-  await page.evaluate(options.theme.script)
-  // 生成 pdf
-  await page.pdf({ path: options.out, ...options.theme.pdfOptions })
-  // 关闭浏览器
-  await browser.close()
+  options.outputHTML && await fs.writeFile(options.out.replace('.pdf', '.html'), html)
+  // 保存 pdf 文件
+  await htmlToPdf(
+    html.replace(/<img src="(.+?)"/g, (match, p1) => {
+      if (p1.startsWith('http')) return match
+      try {
+        const url = path.resolve(path.dirname(options.src), decodeURI(p1))
+        const data = readFileSync(url).toString('base64')
+        return `<img src="data:image/${path.extname(p1).replace('.', '')};base64,${data}"`
+      } catch (_) {
+        console.error(`图片 ${p1} 不存在`)
+        return match
+      }
+    }),
+    options.out,
+    options.theme.pdfOptions
+  )
   // 保存 docx 文件
-  if (options.outputDOCX) {
-    await new Promise<void>((resolve, reject) => {
-      const worker = new Worker(new URL('docx.ts', import.meta.url).href)
-      worker.onmessage = (e) => {
-        switch (e.data) {
-          case 'success': {
-            console.log('')
-            resolve()
-            break
-          }
-          case 'error': {
-            reject(Error('生成 docx 文件失败'))
-            break
-          }
-          default: {
-            reject(Error('调用 Python 时发生未知错误'))
-            break
-          }
+  options.outputDOCX && await pdfToDocx(options.out)
+}
+
+/**
+ * 把 html 转换为 pdf
+ * @param html html 字符串, 图片为 base64
+ * @param dist pdf 文件绝对路径
+ * @param options pdf 参数, 无需设置路径
+ */
+async function htmlToPdf(html: string, dist: string, options: PDFOptions): Promise<void> {
+  const browser = await puppeteer.launch()
+  const page = await browser.newPage()
+  await page.setContent(html)
+  await page.pdf({ path: dist, ...options })
+  await browser.close()
+}
+
+/**
+ * 把 pdf 转换为 docx
+ * @param pdfPath pdf 文件绝对路径
+ */
+function pdfToDocx(pdfPath: string): Promise<void> {
+  return new Promise<void>((resolve, reject) => {
+    const worker = new Worker(new URL('docx.ts', import.meta.url).href)
+    worker.onmessage = (e) => {
+      switch (e.data) {
+        case 'success': {
+          console.log('')
+          resolve()
+          break
+        }
+        case 'error': {
+          reject(Error('生成 docx 文件失败'))
+          break
+        }
+        default: {
+          reject(Error('调用 python 时发生未知错误'))
+          break
         }
       }
-      worker.postMessage(options)
-    })
-  }
+    }
+    worker.postMessage(pdfPath)
+  })
+}
+
+export {
+  MarkdownPaperTheme,
+  MarkdownPaperOptions,
+  renderMarkdown,
+  htmlToPdf,
+  pdfToDocx,
 }

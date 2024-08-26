@@ -1,11 +1,10 @@
 declare var self: Worker
 
 import { $ } from 'bun'
-import { Options } from './main'
 
 self.onmessage = async (e) => {
-  const options = e.data as Options
-  await $`pdf2docx convert ${options.out}`
+  const pdfPath = e.data as string
+  await $`pdf2docx convert ${pdfPath}`
     .then(() => {
       postMessage('success')
     })

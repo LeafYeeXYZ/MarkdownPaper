@@ -1,13 +1,13 @@
-import { Theme } from '../theme'
+import { MarkdownPaperTheme } from '../theme'
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import type { PDFOptions } from 'puppeteer-core'
 
-export class APS extends Theme {
+export class APS extends MarkdownPaperTheme {
 
   css: string
-  preParseMarkdown: (md: string) => string
-  preParseHTML: (html: string) => string
+  preParseMarkdown: (md: string) => Promise<string>
+  preParseHTML: (html: string) => Promise<string>
   script: () => void
   pdfOptions: PDFOptions
 
@@ -34,7 +34,7 @@ export class APS extends Theme {
     this.css = readFileSync(resolve(import.meta.dir, 'aps.css'), 'utf-8')
     
     // preParseMarkdown
-    this.preParseMarkdown = (md: string): string => {
+    this.preParseMarkdown = async (md: string): Promise<string> => {
       // 作者
       md = md.replace(/#author# (.*)/mg, '<div class="author">$1</div>')
       // 单位
@@ -48,17 +48,10 @@ export class APS extends Theme {
     }
 
     // preParseHTML
-    this.preParseHTML = (html: string): string => {
+    this.preParseHTML = async (html: string): Promise<string> => {
       // 把包裹图片的 p 标签去掉
       html = html.replace(/<p><img (.*?)><\/p>/g, '<img $1>')
-      // 加载字体
-      // html = html.replace(/<\/head>/, `
-      //   <link rel="preconnect" href="https://fonts.googleapis.com">
-      //   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      //   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@200..900&display=swap" rel="stylesheet">
-      //   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@200..900&display=swap" rel="stylesheet">
-      //   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@200..900&display=swap" rel="stylesheet">
-      // `)
+      // 返回处理后的字符串
       return html
     }
 
@@ -125,6 +118,5 @@ export class APS extends Theme {
       headerTemplate: showTitle ? `<div style="font-size: 9px; font-family: 'SimSun'; color: #333; padding: 5px; margin-left: 0.6cm;"> <span class="title"></span> </div>` : `<div></div>`,
       footerTemplate: hideFooter ? `<div></div>` : `<div style="font-size: 9px; font-family: 'SimSun'; color: #333; padding: 5px; margin: 0 auto;">第 <span class="pageNumber"></span> 页 / 共 <span class="totalPages"></span> 页</div>`,
     }
-
   }
 }

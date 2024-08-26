@@ -1,7 +1,7 @@
 {
   "name": "markdown-paper",
   "type": "module",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "author": {
     "name": "LeafYeeXYZ",
     "email": "xiaoyezi@leafyee.xyz"
@@ -10,7 +10,7 @@
   "scripts": {
     "mdp": "bun ./bin/mdp.ts",
     "pub": "npm publish",
-    "try": "bun mdp ./论文.md --out=./demo/论文 --outputHTML"
+    "try": "bun mdp ./demo/论文.md --outputHTML --outputDOCX"
   },
   "bin": {
     "mdp": "./bin/mdp.ts"
