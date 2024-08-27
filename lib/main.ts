@@ -180,10 +180,14 @@ function pdfToDocx(pdfPath: string): Promise<void> {
   })
 }
 
+const themes = {
+  APS,
+}
 export {
   MarkdownPaperTheme,
   MarkdownPaperOptions,
   renderMarkdown,
   htmlToPdf,
   pdfToDocx,
+  themes
 }
