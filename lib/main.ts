@@ -4,7 +4,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import { readFileSync } from 'node:fs'
 import { APS } from '../theme/aps/aps'
-import { MarkdownPaperTheme } from '../theme/theme'
+import type { MarkdownPaperTheme } from '../theme/theme'
 import type { PDFOptions } from 'puppeteer'
 
 /** 应用参数 */
@@ -40,7 +40,7 @@ class MarkdownPaperOptions {
     this.out = ''
     this.outputHTML = false
     this.outputDOCX = false
-    this.theme = new APS(args, cwd)
+    this.theme = new APS(args)
     // 解析路径参数
     if (args.length === 0) throw SyntaxError()
     else args[0] = `--src=${args[0]}`
@@ -90,32 +90,14 @@ class MarkdownPaperOptions {
 /**
  * 渲染 markdown
  * @param options 参数
- * @param rawMarkdown 如果传入此参数, 则不再读取文件
  */
 async function renderMarkdown(
   options: MarkdownPaperOptions,
-  rawMarkdown?: string,
 ): Promise<void> {
   // 读取 markdown 文件
-  const raw = rawMarkdown ?? await fs.readFile(options.src, { encoding: 'utf-8' })
-  // 预处理 markdown
-  const md = await options.theme.preParseMarkdown(raw)
-  // 转换 markdown 为 html
-  let html = `
-    <!DOCTYPE html>
-    <html lang="zh-CN">
-    <head>
-      <meta charset="UTF-8">
-      <title>${path.basename(options.src).replace('.md', '')}</title>
-      <style>${options.theme.css}</style>
-    </head>
-    <body>
-      ${await marked(md)}
-    </body>
-    </html>
-  `
-  // 预处理 html
-  html = await options.theme.preParseHTML(html)
+  const raw = await fs.readFile(options.src, { encoding: 'utf-8' })
+  // 生成 html 文件
+  const html = await mdToHtml(raw, options.theme, path.basename(options.src).replace('.md', ''))
   // 保存 html 文件
   options.outputHTML && await fs.writeFile(options.out.replace('.pdf', '.html'), html)
   // 保存 pdf 文件
@@ -180,14 +162,49 @@ function pdfToDocx(pdfPath: string): Promise<void> {
   })
 }
 
-const themes = {
-  APS,
+/**
+ * 把 markdown 转换为 html
+ * @important 浏览器环境中可用
+ * @param md markdown 字符串
+ * @param theme 论文模板
+ * @param pageTitle 页面标题
+ * @returns html 字符串
+ */
+async function mdToHtml(
+  md: string,
+  theme: MarkdownPaperTheme,
+  pageTitle: string = 'MarkdownPaper'
+): Promise<string> {
+  // 预处理 markdown
+  let html = await theme.preParseMarkdown(md)
+  // 转换 markdown 为 html
+  html = `
+    <!DOCTYPE html>
+    <html lang="zh-CN">
+    <head>
+      <meta charset="UTF-8">
+      <title>${pageTitle}</title>
+      <style>${theme.css}</style>
+    </head>
+    <body>
+      ${await marked(html)}
+    </body>
+    </html>
+  `
+  // 预处理 html
+  html = await theme.preParseHTML(html)
+  return html
 }
+
+
 export {
-  MarkdownPaperTheme,
   MarkdownPaperOptions,
   renderMarkdown,
   htmlToPdf,
   pdfToDocx,
-  themes
+  mdToHtml,
+  APS
+}
+export type {
+  MarkdownPaperTheme
 }

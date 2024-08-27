@@ -84,9 +84,9 @@ mdp example.md --outputDOCX
 | `--outputDOCX` | 输出 `DOCX` 文件, 默认不输出<br>**须先通过 `python` 安装依赖 `pdf2docx`**<br>使用时推荐开启 `--hideFooter` 参数 |
 
 # 模板说明
-`/theme/theme.ts` 中的 `Theme` 抽象类定义了模板的样式, 按照类似于 `aps` 文件夹的结构可自定义模板; 模板可以提供自定义功能
+`/theme/theme.ts` 中的 `MarkdownnPaperTheme` 接口定义了模板的样式, 按照类似于 `aps` 文件夹的结构可自定义模板; 模板可以提供自定义功能
 
-模板制作完成后, 在 `/lib/main.ts` 中导入并添加到 `class Options -> constructor -> case '--theme':` 中, 并在下方添加使用文档即可
+模板制作完成后, 在 `/lib/main.ts` 中导入并添加到 `class MarkdownPaperOptions -> constructor -> case '--theme':` 中, 并在下方添加使用文档即可
 
 推荐所有主题的文档和编写格式都尽量与 `aps` 主题保持一致
 
