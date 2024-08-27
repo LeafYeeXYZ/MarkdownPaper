@@ -3,7 +3,7 @@ import puppeteer from 'puppeteer'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { readFileSync } from 'node:fs'
-import { APS } from '../theme/aps/aps'
+import { APS, baseAPS } from '../theme/aps/aps'
 import type { MarkdownPaperTheme } from '../theme/theme'
 import type { PDFOptions } from 'puppeteer'
 
@@ -114,7 +114,8 @@ async function renderMarkdown(
       }
     }),
     options.out,
-    options.theme.pdfOptions
+    options.theme.pdfOptions,
+    options.theme.script
   )
   // 保存 docx 文件
   options.outputDOCX && await pdfToDocx(options.out)
@@ -125,11 +126,14 @@ async function renderMarkdown(
  * @param html html 字符串, 图片为 base64
  * @param dist pdf 文件绝对路径
  * @param options pdf 参数, 无需设置路径
+ * @param script 在网页中要执行的函数
  */
-async function htmlToPdf(html: string, dist: string, options: PDFOptions): Promise<void> {
+async function htmlToPdf(html: string, dist: string, options: PDFOptions, script: () => void): Promise<void> {
   const browser = await puppeteer.launch()
   const page = await browser.newPage()
   await page.setContent(html)
+  // 执行脚本
+  await page.evaluate(script)
   await page.pdf({ path: dist, ...options })
   await browser.close()
 }
@@ -164,7 +168,6 @@ function pdfToDocx(pdfPath: string): Promise<void> {
 
 /**
  * 把 markdown 转换为 html
- * @important 浏览器环境中可用
  * @param md markdown 字符串
  * @param theme 论文模板
  * @param pageTitle 页面标题
@@ -203,7 +206,7 @@ export {
   htmlToPdf,
   pdfToDocx,
   mdToHtml,
-  APS
+  baseAPS
 }
 export type {
   MarkdownPaperTheme
