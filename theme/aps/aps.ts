@@ -121,7 +121,11 @@ export class APS implements MarkdownPaperTheme {
   }
 }
 
-export const baseAPS: MarkdownPaperTheme = {
+export const baseAPS: {
+  css: string
+  preParseMarkdown: (md: string) => Promise<string>
+  preParseHTML: (html: string) => Promise<string>
+} = {
   css:  `
     * {
       font-family: 'Times', 'Times New Roman', '宋体', 'SimSun', '华文宋体', 'STSong'; /* 所有数字和英文字体都用 Times New Roman */
@@ -278,7 +282,5 @@ export const baseAPS: MarkdownPaperTheme = {
     html = html.replace(/<p><img (.*?)><\/p>/g, '<img $1>')
     // 返回处理后的字符串
     return html
-  },
-  script: () => {},
-  pdfOptions: {}
+  }
 }
