@@ -3,9 +3,12 @@ import puppeteer from 'puppeteer'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 import { readFileSync } from 'node:fs'
-import { APS, baseAPS } from '../theme/aps/aps'
+import { APS } from '../theme/aps/aps'
 import type { MarkdownPaperTheme } from '../theme/theme'
 import type { PDFOptions } from 'puppeteer'
+import markedKatex from 'marked-katex-extension'
+// @ts-ignore
+import katexCss from 'katex/dist/katex.css' with { type: 'text' }
 
 /** 应用参数 */
 class MarkdownPaperOptions {
@@ -178,6 +181,8 @@ async function mdToHtml(
   theme: MarkdownPaperTheme,
   pageTitle: string = 'MarkdownPaper'
 ): Promise<string> {
+  // 设置 marked
+  marked.use(markedKatex({ throwOnError: false }))
   // 预处理 markdown
   let html = await theme.preParseMarkdown(md)
   // 转换 markdown 为 html
@@ -188,6 +193,7 @@ async function mdToHtml(
       <meta charset="UTF-8">
       <title>${pageTitle}</title>
       <style>${theme.css}</style>
+      <style>\n${katexCss}\n</style>
     </head>
     <body>
       ${await marked(html)}
@@ -206,7 +212,7 @@ export {
   htmlToPdf,
   pdfToDocx,
   mdToHtml,
-  baseAPS
+  APS
 }
 export type {
   MarkdownPaperTheme

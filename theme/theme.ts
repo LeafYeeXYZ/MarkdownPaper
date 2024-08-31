@@ -1,4 +1,4 @@
-import type { PDFOptions } from 'puppeteer-core'
+import type { PDFOptions } from 'puppeteer'
 
 export interface MarkdownPaperTheme {
   /** 
