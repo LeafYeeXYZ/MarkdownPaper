@@ -9,6 +9,7 @@ import type { PDFOptions } from 'puppeteer'
 import markedKatex from 'marked-katex-extension'
 // @ts-ignore
 import katexCss from 'katex/dist/katex.css' with { type: 'text' }
+import { asBlob } from 'html-docx-js-typescript'
 
 /** 应用参数 */
 class MarkdownPaperOptions {
@@ -101,8 +102,6 @@ async function renderMarkdown(
   const raw = await fs.readFile(options.src, { encoding: 'utf-8' })
   // 生成 html 文件
   const html = await mdToHtml(raw, options.theme, path.basename(options.src).replace('.md', ''))
-  // 保存 html 文件
-  options.outputHTML && await fs.writeFile(options.out.replace('.pdf', '.html'), html)
   // 保存 pdf 文件
   await htmlToPdf(
     html.replace(/<img src="(.+?)"/g, (match, p1) => {
@@ -120,8 +119,13 @@ async function renderMarkdown(
     options.theme.pdfOptions,
     options.theme.script
   )
+  // 保存 html 文件
+  options.outputHTML && await fs.writeFile(options.out.replace('.pdf', '.html'), html)
   // 保存 docx 文件
-  options.outputDOCX && await pdfToDocx(options.out)
+  const docx = await asBlob(html)
+  const docxBuffer = new Uint8Array(docx instanceof Blob ? await docx.arrayBuffer() : docx.buffer)
+  options.outputDOCX && await fs.writeFile(options.out.replace('.pdf', '.docx'), docxBuffer)
+  options.outputDOCX && console.warn('导出的 DOCX 文件可能存在格式丢失, 请手动调整\n')
 }
 
 /**
@@ -139,34 +143,6 @@ async function htmlToPdf(html: string, dist: string, options: PDFOptions, script
   await page.evaluate(script)
   await page.pdf({ path: dist, ...options })
   await browser.close()
-}
-
-/**
- * 把 pdf 转换为 docx
- * @param pdfPath pdf 文件绝对路径
- */
-function pdfToDocx(pdfPath: string): Promise<void> {
-  return new Promise<void>((resolve, reject) => {
-    const worker = new Worker(new URL('docx.ts', import.meta.url).href)
-    worker.onmessage = (e) => {
-      switch (e.data) {
-        case 'success': {
-          console.log('')
-          resolve()
-          break
-        }
-        case 'error': {
-          reject(Error('生成 docx 文件失败'))
-          break
-        }
-        default: {
-          reject(Error('调用 python 时发生未知错误'))
-          break
-        }
-      }
-    }
-    worker.postMessage(pdfPath)
-  })
 }
 
 /**
@@ -210,7 +186,6 @@ export {
   MarkdownPaperOptions,
   renderMarkdown,
   htmlToPdf,
-  pdfToDocx,
   mdToHtml,
   APS
 }

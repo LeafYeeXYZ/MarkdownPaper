@@ -86,7 +86,6 @@ mdp example.md --out=D:/example.pdf
 # 从当前工作目录下的 example.md 文件生成 PDF 和 HTML 文件
 mdp example.md --outputHTML
 # 从当前工作目录下的 example.md 文件生成 PDF 和 DOCX 文件
-pip install pdf2docx # 仅生成 DOCX 文件时需要安装 pdf2docx, 只需安装一次
 mdp example.md --outputDOCX
 ```
 
@@ -95,7 +94,7 @@ mdp example.md --outputDOCX
 | `--out=xxx` | 输出文件相对路径<br>默认为源文件路径的同名 `PDF` 文件 |
 | `--theme=xxx` | 论文模板, 默认为 `aps` (`Acta Psychologica Sinica`)<br>暂时没有其他模板, 欢迎贡献 |
 | `--outputHTML` | 输出 `HTML` 文件, 默认不输出 |
-| `--outputDOCX` | 输出 `DOCX` 文件, 默认不输出<br>**须先通过 `python` 安装依赖 `pdf2docx`**<br>使用时推荐开启 `--hideFooter` 参数 |
+| `--outputDOCX` | 输出 `DOCX` 文件, 默认不输出<br>**导出后样式可能无法完全保留, 请自行调整** |
 
 # 模板说明
 `/theme/theme.ts` 中的 `MarkdownnPaperTheme` 接口定义了模板的样式, 按照类似于 `aps` 文件夹的结构可自定义模板; 模板可以提供自定义功能
@@ -117,6 +116,7 @@ mdp example.md --outputDOCX
 同上
 
 # 更新日志
+- `2.4.0` (2024-12-08): 导出 `DOCX` 文件时, 不再依赖 `Python`
 - `2.3.0` (2024-08-31): 支持数学公式
 - `2.2.0` (2024-08-26): 半重构, 优化导入导出, 优化文档
 - `2.1.1` (2024-07-12): 修复字体错误
