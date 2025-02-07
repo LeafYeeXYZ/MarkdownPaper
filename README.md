@@ -58,6 +58,8 @@ $$
 
 > 数学公式语法详见 [https://katex.org](https://katex.org) 和[这篇中文文章](https://kissingfire123.github.io/2022/02/18_数学公式katex常用语法总结)
 
+> 小技巧: 使用 `<div style="page-break-after: always;"></div>` 可以在文章中插入分页符
+
 ## 2 安装 `Bun`
 
 `Bun` 是一个现代的 `JavaScript` / `TypeScript` 运行环境, 本项目基于 `Bun` 环境开发; 请在官网 [bun.sh](https://bun.sh) 下载并安装 `Bun`, 也可以直接使用 `npm install -g bun` 安装
@@ -97,6 +99,7 @@ mdp example.md --outputDOCX
 | `--outputDOCX` | 输出 `DOCX` 文件, 默认不输出<br>**导出后样式可能无法完全保留, 请自行调整** |
 
 # 模板说明
+
 `/theme/theme.ts` 中的 `MarkdownnPaperTheme` 接口定义了模板的样式, 按照类似于 `aps` 文件夹的结构可自定义模板; 模板可以提供自定义功能
 
 模板制作完成后, 在 `/lib/main.ts` 中导入并添加到 `class MarkdownPaperOptions -> constructor -> case '--theme':` 中, 并在下方添加使用文档即可
@@ -104,7 +107,9 @@ mdp example.md --outputDOCX
 推荐所有主题的文档和编写格式都尽量与 `aps` 主题保持一致
 
 ## APS 模板
+
 ### 额外命令行参数
+
 | 参数 | 说明 |
 | :---: | :---: |
 | `--showTitle` | 在页眉显示文件名, 默认不显示 |
@@ -113,9 +118,11 @@ mdp example.md --outputDOCX
 | `--enPunctuation` | 将正文中的中文标点符号替换为英文标点符号, 默认不替换<br>仅替换 `PDF` 和 `DOCX` 文件 |
 
 ### 编写格式
+
 同上
 
 # 更新日志
+
 - `2.4.0` (2024-12-08): 导出 `DOCX` 文件时, 不再依赖 `Python`
 - `2.3.0` (2024-08-31): 支持数学公式
 - `2.2.0` (2024-08-26): 半重构, 优化导入导出, 优化文档
