@@ -64,7 +64,7 @@ $$
 
 ## 2 安装 `Bun`
 
-`Bun` 是一个现代的 `JavaScript` / `TypeScript` 运行环境, 本项目基于 `Bun` 环境开发; 请在官网 [bun.sh](https://bun.sh) 下载并安装 `Bun`, 也可以直接使用 `npm install -g bun` 安装
+`Bun` 是一个现代的 `JavaScript` / `TypeScript` 运行环境, 本项目基于 `Bun` 环境运行; 请在官网 [bun.sh](https://bun.sh) 下载并安装 `Bun`, 也可以直接使用 `npm install -g bun` 安装
 
 ## 3 安装 `MarkdownPaper`
 

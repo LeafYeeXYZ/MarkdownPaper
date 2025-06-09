@@ -1,37 +1,46 @@
 #!/usr/bin/env bun
 
-import { MarkdownPaperOptions, renderMarkdown } from '../lib/main.ts'
-/** 命令行参数 */
-const args = process.argv.slice(2)
-/** 当前工作目录 */
+import { resolve } from 'node:path'
+import { Command } from 'commander'
+import { render } from '../lib/main'
+import { cliOptions } from '../lib/types'
+import { version } from '../package.json'
+
+const program = new Command()
 const cwd = process.cwd()
-/**
- * 主函数
- * @param args 命令行参数
- * @param cwd 当前工作目录
- */
-void async function main(args: string[], cwd: string) {
-  try {
-    // 如果没有参数, 显示帮助信息
-    if (args.length === 0) {
-      console.log(`\n使用方法:\n${MarkdownPaperOptions.format}\n`)
-      process.exit(0)
-    }
-    // 解析参数
-    console.log('\n开始生成\n')
-    const options = new MarkdownPaperOptions(args, cwd)
-    // 渲染 markdown
-    await renderMarkdown(options)
-    console.log('生成成功\n')
-  } 
-  catch (e) {
-    if (e instanceof SyntaxError) {
-      console.error(`参数错误, 正确格式:\n${MarkdownPaperOptions.format}\n`)
-    } else if (e instanceof Error) {
-      console.error(`错误:\n${e.message}\n`)
-    }
-  } 
-  finally {
-    process.exit(0)
-  }
-}(args, cwd)
+
+program
+	.name('mdp')
+	.description('MarkdownPaper CLI')
+	.version(version)
+	.argument('<markdown>', 'Markdown文件相对路径')
+	.option('--out <path>', '输出文件相对路径 (默认和Markdown文件相同)')
+	.option('--theme <name>', '论文模板 (默认为心理学报)', 'APS')
+	.option('--html --output-html', '输出HTML文件', false)
+	.option('--docx --output-docx', '输出DOCX文件', false)
+	.option('--hide-footer', '隐藏页脚页码', false)
+	.option('--punctuation <zh/en/origin>', '标点符号格式', 'zh')
+	.command('themes', '显示所有可用的论文模板')
+	.action((markdown, options) => {
+		console.log('开始生成')
+		const src = resolve(cwd, markdown)
+		const out = options.out
+			? resolve(cwd, options.out)
+			: src.replace(/\.md$/, '.pdf')
+		const opts = cliOptions.parse({
+			...options,
+			src,
+			out,
+		})
+		render(opts)
+			.then(() => {
+				console.log('生成成功')
+				process.exit(0)
+			})
+			.catch((error) => {
+				console.error(`生成失败: ${error.message}`)
+				process.exit(1)
+			})
+	})
+
+program.parse(process.argv)

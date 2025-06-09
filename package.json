@@ -1,31 +1,57 @@
 {
-  "name": "markdown-paper",
-  "type": "module",
-  "version": "2.5.0",
-  "author": {
-    "name": "LeafYeeXYZ",
-    "email": "xiaoyezi@leafyee.xyz"
-  },
-  "license": "GPL-3.0-only",
-  "scripts": {
-    "mdp": "bun ./bin/mdp.ts",
-    "pub": "npm publish",
-    "try": "bun mdp ./demo/论文.md --outputHTML --outputDOCX"
-  },
-  "main": "./lib/main.ts",
-  "bin": {
-    "mdp": "./bin/mdp.ts"
-  },
-  "devDependencies": {
-    "@types/bun": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.4.5"
-  },
-  "dependencies": {
-    "html-docx-js-typescript": "^0.1.5",
-    "marked": "^12.0.2",
-    "marked-katex-extension": "^5.1.3",
-    "puppeteer": "^22.15.0"
-  }
+	"name": "markdown-paper",
+	"version": "3.0.0",
+	"author": {
+		"name": "LeafYeeXYZ",
+		"email": "xiaoyezi@leafyee.xyz"
+	},
+	"dependencies": {
+		"commander": "^14.0.0",
+		"html-docx-js-typescript": "^0.1.5",
+		"marked": "^12.0.2",
+		"marked-katex-extension": "^5.1.4",
+		"puppeteer": "^22.15.0",
+		"zod": "^3.25.56"
+	},
+	"peerDependencies": {
+		"typescript": "^5.4.5"
+	},
+	"bin": {
+		"mdp": "bun ./bin/mdp.ts",
+		"mdp-themes": "bun ./bin/mdp-themes.ts"
+	},
+	"license": "GPL-3.0-only",
+	"scripts": {
+		"mdp": "bun ./bin/mdp.ts",
+		"pub": "bun publish",
+		"try": "bun mdp ./demo/论文.md --html --docx",
+		"release:create": "commit-and-tag-version",
+		"release:push": "git push --follow-tags origin main",
+		"check": "biome check --write ."
+	},
+	"type": "module",
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"commit-and-tag-version": "^12.5.1"
+	},
+	"commit-and-tag-version": {
+		"types": [
+			{
+				"type": "feat",
+				"section": "Features"
+			},
+			{
+				"type": "fix",
+				"section": "Bug Fixes"
+			},
+			{
+				"type": "refactor",
+				"section": "Refactoring"
+			},
+			{
+				"type": "perf",
+				"section": "Improvements"
+			}
+		]
+	}
 }
