@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.0.1](https://github.com/LeafYeeXYZ/MarkdownPaper/compare/v3.0.0...v3.0.1) (2025-06-09)
+
+
+### Bug Fixes
+
+* 修改在不输入.md时无法识别的问题 ([142daf2](https://github.com/LeafYeeXYZ/MarkdownPaper/commit/142daf25141d2b326d74ebcf0220e028c689e8a5))
+
 ## 3.0.0 (2025-06-09)
 
 
