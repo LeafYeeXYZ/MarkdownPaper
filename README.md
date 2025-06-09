@@ -1,4 +1,4 @@
-以心理学报等学术论文的格式从 Markdown 生成 PDF / HTML / DOCX 文件
+**以心理学报等学术论文的格式从 Markdown 生成 PDF / HTML / DOCX 文件**
 
 # 使用方法
 
@@ -85,9 +85,10 @@ bun add -g markdown-paper
 mdp --help
 # 查看版本信息
 mdp --version
+# 查看可用的论文模板
+mdp themes
 # 从当前工作目录下的 example.md 文件生成 PDF 文件
-mdp example.md
-mdp example # 可以省略文件后缀名
+mdp example.md # 可以省略 .md 后缀
 ```
 
 # 模板说明
