@@ -23,10 +23,9 @@
 	"license": "GPL-3.0-only",
 	"scripts": {
 		"mdp": "bun ./bin/mdp.ts",
-		"pub": "bun publish",
 		"try": "bun mdp ./demo/论文.md --html --docx",
 		"release:create": "commit-and-tag-version",
-		"release:push": "git push --follow-tags origin main",
+		"release:publish": "git push --follow-tags origin main && npm publish",
 		"check": "biome check --write ."
 	},
 	"type": "module",
