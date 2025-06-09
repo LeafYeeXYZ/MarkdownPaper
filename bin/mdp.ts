@@ -23,7 +23,9 @@ program
 	.command('themes', '显示所有可用的论文模板')
 	.action((markdown, options) => {
 		console.log('开始生成')
-		const src = resolve(cwd, markdown)
+		const src = markdown.startsWith('.md')
+			? resolve(cwd, markdown)
+			: resolve(cwd, `${markdown}.md`)
 		const out = options.out
 			? resolve(cwd, options.out)
 			: src.replace(/\.md$/, '.pdf')
