@@ -23,7 +23,7 @@ program
 	.command('themes', '显示所有可用的论文模板')
 	.action((markdown, options) => {
 		console.log('开始生成')
-		const src = markdown.startsWith('.md')
+		const src = markdown.endsWith('.md')
 			? resolve(cwd, markdown)
 			: resolve(cwd, `${markdown}.md`)
 		const out = options.out

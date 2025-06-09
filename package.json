@@ -29,6 +29,7 @@
 		"check": "biome check --write ."
 	},
 	"type": "module",
+	"main": "./lib/index.ts",
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"commit-and-tag-version": "^12.5.1"
