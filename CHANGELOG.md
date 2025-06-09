@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.1.0](https://github.com/LeafYeeXYZ/MarkdownPaper/compare/v3.0.1...v3.1.0) (2025-06-09)
+
+
+### Features
+
+* 新增导出 ([196dfea](https://github.com/LeafYeeXYZ/MarkdownPaper/commit/196dfea1565f19d42c67e6fb995dd86d6c82aa1f))
+
 ## [3.0.1](https://github.com/LeafYeeXYZ/MarkdownPaper/compare/v3.0.0...v3.0.1) (2025-06-09)
 
 
