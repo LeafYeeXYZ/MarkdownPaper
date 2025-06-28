@@ -91,6 +91,8 @@ mdp themes
 mdp example.md # 可以省略 .md 后缀
 ```
 
+> 注: 如果自带模板无法满足您的需求, 您也可以在 `Markdown` 文件中直接书写 `<style></style>` 等 HTML 标签来实现自定义样式, 但请注意这可能会影响到论文的格式和样式
+
 # 模板说明
 
 `/lib/types.ts` 中的 `MarkdownnPaperTheme` 类型定义了论文模板; 模板制作完成后, 在 `/lib/types.ts` 中导入并添加即可使用
