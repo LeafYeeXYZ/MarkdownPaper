@@ -8,6 +8,15 @@ import { version } from '../package.json'
 
 const program = new Command()
 const cwd = process.cwd()
+let browser = '/usr/bin/google-chrome'
+switch (process.platform) {
+	case 'win32':
+		browser = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe'
+		break
+	case 'darwin':
+		browser = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+		break
+}
 
 program
 	.name('mdp')
@@ -20,6 +29,7 @@ program
 	.option('--docx --output-docx', '输出DOCX文件', false)
 	.option('--hide-footer', '隐藏页脚页码', false)
 	.option('--punctuation <zh/en/origin>', '标点符号格式', 'zh')
+	.option('--browser <path>', 'Puppeteer浏览器路径 (默认为系统安装的Chrome)', browser)
 	.command('themes', '显示所有可用的论文模板')
 	.action((markdown, options) => {
 		console.log('开始生成')

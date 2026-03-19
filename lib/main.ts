@@ -6,7 +6,7 @@ import { asBlob } from 'html-docx-js-typescript'
 import katexCss from 'katex/dist/katex.css' with { type: 'text' }
 import { marked } from 'marked'
 import markedKatex from 'marked-katex-extension'
-import puppeteer from 'puppeteer'
+import puppeteer from 'puppeteer-core'
 import { type MarkdownPaperOptions, themes } from './types'
 
 /**
@@ -43,7 +43,9 @@ export async function render(options: MarkdownPaperOptions): Promise<void> {
 			return match
 		}
 	})
-	const browser = await puppeteer.launch()
+	const browser = await puppeteer.launch({
+		executablePath: options.browser,
+	})
 	const page = await browser.newPage()
 	await page.setContent(html)
 	await page.evaluate(theme.script)

@@ -1,4 +1,4 @@
-import type { PDFOptions } from 'puppeteer'
+import type { PDFOptions } from 'puppeteer-core'
 import { z } from 'zod'
 import { themeAPS } from './themes/aps'
 
@@ -28,6 +28,7 @@ export const cliOptions = z.object({
 	outputDocx: z.boolean(),
 	hideFooter: z.boolean(),
 	punctuation: z.enum(['zh', 'en', 'origin']),
+	browser: z.string(),
 })
 
 /**

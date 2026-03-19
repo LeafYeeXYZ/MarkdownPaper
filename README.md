@@ -74,7 +74,13 @@ bun add -g markdown-paper
 
 > 如果您安装过旧版本的 `MarkdownPaper` (小于 `2.0.0`), 请先卸载旧版本再安装新版本
 
-## 4 生成论文
+## 4 安装 `Chrome` 浏览器
+
+`MarkdownPaper` 使用 `Puppeteer` 库将 `Markdown` 转换为 `PDF` 文件, 需要依赖 `Chrome` 浏览器; 请确保您的系统中安装了 `Chrome` 浏览器, 如果没有安装, 请前往 [Google Chrome 官网](https://www.google.com/chrome/) 下载并安装
+
+`MarkdownPaper` 默认会读取 `C:\Program Files\Google\Chrome\Application\chrome.exe` (Windows) 或 `/Applications/Google Chrome.app/Contents/MacOS/Google Chrome` (macOS) 路径下的 `Chrome` 浏览器, 如果您的 `Chrome` 浏览器安装在其他路径, 请在生成论文时使用 `--browser <path>` 选项指定浏览器路径
+
+## 5 生成论文
 
 运行 `mdp` 命令以使用 `MarkdownPaper` 命令行工具从 `Markdown` 文件生成论文
 
