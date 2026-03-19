@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.2.0](https://github.com/LeafYeeXYZ/MarkdownPaper/compare/v3.1.1...v3.2.0) (2026-03-19)
+
+
+### Features
+
+* 支持自动使用系统安装的Chrome ([128528b](https://github.com/LeafYeeXYZ/MarkdownPaper/commit/128528ba10b64246b96b03e64ec688f8c0f83321))
+
 ## [3.1.1](https://github.com/LeafYeeXYZ/MarkdownPaper/compare/v3.1.0...v3.1.1) (2025-06-12)
 
 
