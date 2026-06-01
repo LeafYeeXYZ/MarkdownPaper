@@ -6,17 +6,22 @@
     "name": "LeafYeeXYZ"
   },
   "bin": {
-    "mdp": "./bin/mdp.ts",
-    "mdp-themes": "./bin/mdp-themes.ts"
+    "mdp": "./dist/bin/mdp.mjs",
+    "mdp-themes": "./dist/bin/mdp-themes.mjs"
   },
+  "files": [
+    "dist/"
+  ],
   "type": "module",
-  "main": "./lib/index.ts",
+  "main": "./dist/lib/index.mjs",
   "scripts": {
     "mdp": "node ./bin/mdp.ts",
     "try": "node ./bin/mdp.ts ./demo/论文.md --html --docx",
+    "build": "vp pack lib/index.ts bin/mdp.ts bin/mdp-themes.ts --out-dir dist --format esm && cp lib/themes/*.css dist/",
     "release:create": "commit-and-tag-version",
     "release:publish": "git push --follow-tags origin main && npm publish",
-    "prepare": "vp config"
+    "prepare": "vp config",
+    "prepublishOnly": "npm run build"
   },
   "dependencies": {
     "commander": "^14.0.0",
