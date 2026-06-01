@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.0.1](https://github.com/LeafYeeXYZ/MarkdownPaper/compare/v4.0.0...v4.0.1) (2026-06-01)
+
+### Bug Fixes
+
+- 更新 package.json，修复路径问题 ([c2c4fad](https://github.com/LeafYeeXYZ/MarkdownPaper/commit/c2c4fad8e9aeb4f5ffbbee047e285491c5d7d3af))
+
 ## [4.0.0](https://github.com/LeafYeeXYZ/MarkdownPaper/compare/v3.2.0...v4.0.0) (2026-06-01)
 
 ### ⚠ BREAKING CHANGES
