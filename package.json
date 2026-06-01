@@ -3,18 +3,17 @@
   "version": "3.2.0",
   "license": "GPL-3.0-only",
   "author": {
-    "name": "LeafYeeXYZ",
-    "email": "xiaoyezi@leafyee.xyz"
+    "name": "LeafYeeXYZ"
   },
   "bin": {
-    "mdp": "bun ./bin/mdp.ts",
-    "mdp-themes": "bun ./bin/mdp-themes.ts"
+    "mdp": "./bin/mdp.ts",
+    "mdp-themes": "./bin/mdp-themes.ts"
   },
   "type": "module",
   "main": "./lib/index.ts",
   "scripts": {
-    "mdp": "bun ./bin/mdp.ts",
-    "try": "bun mdp ./demo/论文.md --html --docx",
+    "mdp": "node ./bin/mdp.ts",
+    "try": "node ./bin/mdp.ts ./demo/论文.md --html --docx",
     "release:create": "commit-and-tag-version",
     "release:publish": "git push --follow-tags origin main && npm publish",
     "prepare": "vp config"
@@ -22,6 +21,7 @@
   "dependencies": {
     "commander": "^14.0.0",
     "html-docx-js-typescript": "^0.1.5",
+    "katex": "^0.17.0",
     "marked": "^12.0.2",
     "marked-katex-extension": "^5.1.4",
     "puppeteer-core": "^24.39.1",
@@ -35,25 +35,5 @@
     "vite": "npm:@voidzero-dev/vite-plus-core@latest",
     "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
   },
-  "packageManager": "pnpm@10.33.4",
-  "commit-and-tag-version": {
-    "types": [
-      {
-        "type": "feat",
-        "section": "Features"
-      },
-      {
-        "type": "fix",
-        "section": "Bug Fixes"
-      },
-      {
-        "type": "refactor",
-        "section": "Refactoring"
-      },
-      {
-        "type": "perf",
-        "section": "Improvements"
-      }
-    ]
-  }
+  "packageManager": "pnpm@10.33.4"
 }

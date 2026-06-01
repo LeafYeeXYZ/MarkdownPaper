@@ -1,9 +1,11 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 
 import { Command } from 'commander'
 
-import { themeLabels } from '../lib/types'
-import { version } from '../package.json'
+import { themeLabels } from '../lib/types.ts'
+import pkg from '../package.json' with { type: 'json' }
+
+const { version } = pkg
 
 const program = new Command()
 

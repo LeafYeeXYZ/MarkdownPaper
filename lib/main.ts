@@ -1,16 +1,19 @@
 import { readFileSync } from 'node:fs'
 import { readFile, writeFile } from 'node:fs/promises'
 import { dirname, extname, resolve } from 'node:path'
+import { fileURLToPath } from 'node:url'
 
 import { asBlob } from 'html-docx-js-typescript'
 import { marked } from 'marked'
 import markedKatex from 'marked-katex-extension'
 import puppeteer from 'puppeteer-core'
 
-import { type MarkdownPaperOptions, themes } from './types'
+import { type MarkdownPaperOptions, themes } from './types.ts'
 
-// @ts-ignore
-import katexCss from 'katex/dist/katex.css' with { type: 'text' }
+const katexCss: string = readFileSync(
+  fileURLToPath(import.meta.resolve('katex/dist/katex.css')),
+  'utf-8',
+)
 
 /**
  * 渲染 MarkdownPaper 文档

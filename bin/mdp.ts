@@ -1,12 +1,14 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 
 import { resolve } from 'node:path'
 
 import { Command } from 'commander'
 
-import { render } from '../lib/main'
-import { cliOptions } from '../lib/types'
-import { version } from '../package.json'
+import { render } from '../lib/main.ts'
+import { cliOptions } from '../lib/types.ts'
+import pkg from '../package.json' with { type: 'json' }
+
+const { version } = pkg
 
 const program = new Command()
 const cwd = process.cwd()
@@ -25,13 +27,13 @@ program
   .description('MarkdownPaper CLI')
   .version(version)
   .argument('<markdown>', 'Markdown文件相对路径')
-  .option('--out <path>', '输出文件相对路径 (默认和Markdown文件相同)')
-  .option('--theme <name>', '论文模板 (默认为心理学报)', 'APS')
+  .option('--out <path>', '输出文件相对路径')
+  .option('--theme <name>', '论文模板', 'APS')
   .option('--html --output-html', '输出HTML文件', false)
   .option('--docx --output-docx', '输出DOCX文件', false)
   .option('--hide-footer', '隐藏页脚页码', false)
   .option('--punctuation <zh/en/origin>', '标点符号格式', 'zh')
-  .option('--browser <path>', 'Puppeteer浏览器路径 (默认为系统安装的Chrome)', browser)
+  .option('--browser <path>', 'Puppeteer浏览器路径', browser)
   .command('themes', '显示所有可用的论文模板')
   .action((markdown, options) => {
     console.log('开始生成')

@@ -1,14 +1,15 @@
 import type { PDFOptions } from 'puppeteer-core'
 import { z } from 'zod'
 
-import { themeAPS } from './themes/aps'
+import { themeAPS } from './themes/aps.ts'
 
 /**
  * MarkdownPaper 主题 ID
  */
-export enum MarkdownPaperThemes {
-  APS = 'APS',
-}
+export const MarkdownPaperThemes = {
+  APS: 'APS',
+} as const
+export type MarkdownPaperThemes = (typeof MarkdownPaperThemes)[keyof typeof MarkdownPaperThemes]
 
 export const themeLabels: Record<MarkdownPaperThemes, string> = {
   [MarkdownPaperThemes.APS]: '心理学报',
@@ -24,7 +25,7 @@ export const themes: Record<MarkdownPaperThemes, MarkdownPaperTheme> = {
 export const cliOptions = z.object({
   src: z.string(),
   out: z.string(),
-  theme: z.nativeEnum(MarkdownPaperThemes),
+  theme: z.enum([MarkdownPaperThemes.APS]),
   outputHtml: z.boolean(),
   outputDocx: z.boolean(),
   hideFooter: z.boolean(),
@@ -70,7 +71,7 @@ export type MarkdownPaperTheme = (args: MarkdownPaperOptions) => Promise<{
   /**
    * 在网页中要执行的函数
    */
-  script(): void
+  script(this: void): void
   /**
    * PDF 参数 (无需设置路径)
    */

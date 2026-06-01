@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
-import { type MarkdownPaperTheme, MarkdownPaperThemes } from '../types'
+import { type MarkdownPaperTheme, MarkdownPaperThemes } from '../types.ts'
 
 const cssPath = resolve(import.meta.dirname, 'aps.css')
 const cssContent = await readFile(cssPath, 'utf-8')
