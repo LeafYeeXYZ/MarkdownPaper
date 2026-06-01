@@ -1,57 +1,59 @@
 {
-	"name": "markdown-paper",
-	"version": "3.2.0",
-	"author": {
-		"name": "LeafYeeXYZ",
-		"email": "xiaoyezi@leafyee.xyz"
-	},
-	"dependencies": {
-		"commander": "^14.0.0",
-		"html-docx-js-typescript": "^0.1.5",
-		"marked": "^12.0.2",
-		"marked-katex-extension": "^5.1.4",
-		"puppeteer-core": "^24.39.1",
-		"zod": "^3.25.56"
-	},
-	"peerDependencies": {
-		"typescript": "^5.4.5"
-	},
-	"bin": {
-		"mdp": "bun ./bin/mdp.ts",
-		"mdp-themes": "bun ./bin/mdp-themes.ts"
-	},
-	"license": "GPL-3.0-only",
-	"scripts": {
-		"mdp": "bun ./bin/mdp.ts",
-		"try": "bun mdp ./demo/论文.md --html --docx",
-		"release:create": "commit-and-tag-version",
-		"release:publish": "git push --follow-tags origin main && npm publish",
-		"check": "biome check --write ."
-	},
-	"type": "module",
-	"main": "./lib/index.ts",
-	"devDependencies": {
-		"@biomejs/biome": "1.9.4",
-		"commit-and-tag-version": "^12.5.1"
-	},
-	"commit-and-tag-version": {
-		"types": [
-			{
-				"type": "feat",
-				"section": "Features"
-			},
-			{
-				"type": "fix",
-				"section": "Bug Fixes"
-			},
-			{
-				"type": "refactor",
-				"section": "Refactoring"
-			},
-			{
-				"type": "perf",
-				"section": "Improvements"
-			}
-		]
-	}
+  "name": "markdown-paper",
+  "version": "3.2.0",
+  "license": "GPL-3.0-only",
+  "author": {
+    "name": "LeafYeeXYZ",
+    "email": "xiaoyezi@leafyee.xyz"
+  },
+  "bin": {
+    "mdp": "bun ./bin/mdp.ts",
+    "mdp-themes": "bun ./bin/mdp-themes.ts"
+  },
+  "type": "module",
+  "main": "./lib/index.ts",
+  "scripts": {
+    "mdp": "bun ./bin/mdp.ts",
+    "try": "bun mdp ./demo/论文.md --html --docx",
+    "release:create": "commit-and-tag-version",
+    "release:publish": "git push --follow-tags origin main && npm publish",
+    "prepare": "vp config"
+  },
+  "dependencies": {
+    "commander": "^14.0.0",
+    "html-docx-js-typescript": "^0.1.5",
+    "marked": "^12.0.2",
+    "marked-katex-extension": "^5.1.4",
+    "puppeteer-core": "^24.39.1",
+    "zod": "^3.25.56"
+  },
+  "devDependencies": {
+    "commit-and-tag-version": "^12.5.1",
+    "vite-plus": "latest"
+  },
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+    "vitest": "npm:@voidzero-dev/vite-plus-test@latest"
+  },
+  "packageManager": "pnpm@10.33.4",
+  "commit-and-tag-version": {
+    "types": [
+      {
+        "type": "feat",
+        "section": "Features"
+      },
+      {
+        "type": "fix",
+        "section": "Bug Fixes"
+      },
+      {
+        "type": "refactor",
+        "section": "Refactoring"
+      },
+      {
+        "type": "perf",
+        "section": "Improvements"
+      }
+    ]
+  }
 }
