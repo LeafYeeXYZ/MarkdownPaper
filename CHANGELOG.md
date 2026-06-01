@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.0.0](https://github.com/LeafYeeXYZ/MarkdownPaper/compare/v3.2.0...v4.0.0) (2026-06-01)
+
+### ⚠ BREAKING CHANGES
+
+- 更新文档和代码, 移除对 Bun 的依赖
+
+- 更新文档和代码, 移除对 Bun 的依赖 ([47eab3b](https://github.com/LeafYeeXYZ/MarkdownPaper/commit/47eab3bc8e3c23c5dcc02bf0d4b31ba6b49d90c8))
+
 ## [3.2.0](https://github.com/LeafYeeXYZ/MarkdownPaper/compare/v3.1.1...v3.2.0) (2026-03-19)
 
 ### Features
